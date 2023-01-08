@@ -15,7 +15,7 @@ export default class ShowcaseLayout extends React.Component {
       currentBreakpoint: "lg",
       compactType: "vertical",
       mounted: false,
-      layouts: { lg: props.initialLayout }
+      layouts: { lg: props.initialLayout },
     };
 
     this.onBreakpointChange = this.onBreakpointChange.bind(this);
@@ -33,7 +33,7 @@ export default class ShowcaseLayout extends React.Component {
       position: "absolute",
       right: "2px",
       top: 0,
-      cursor: "pointer"
+      cursor: "pointer",
     };
     const thiswindow = this;
     return _.map(this.state.layouts.lg, function (l, i) {
@@ -58,7 +58,7 @@ export default class ShowcaseLayout extends React.Component {
 
   onBreakpointChange(breakpoint) {
     this.setState({
-      currentBreakpoint: breakpoint
+      currentBreakpoint: breakpoint,
     });
   }
 
@@ -84,7 +84,7 @@ export default class ShowcaseLayout extends React.Component {
 
   onNewLayout() {
     this.setState({
-      layouts: { lg: generateLayout() }
+      layouts: { lg: generateLayout() },
     });
   }
 
@@ -124,7 +124,7 @@ export default class ShowcaseLayout extends React.Component {
 }
 
 ShowcaseLayout.propTypes = {
-  onLayoutChange: PropTypes.func.isRequired
+  onLayoutChange: PropTypes.func.isRequired,
 };
 
 ShowcaseLayout.defaultProps = {
@@ -132,19 +132,19 @@ ShowcaseLayout.defaultProps = {
   rowHeight: 30,
   onLayoutChange: function () {},
   cols: { lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 },
-  initialLayout: generateLayout()
+  initialLayout: generateLayout(),
 };
 
 function generateLayout() {
-  return _.map(_.range(0, 25), function (item, i) {
+  return _.map(_.range(0, 2), function (item, i) {
     var y = Math.ceil(Math.random() * 4) + 1;
     return {
-      x: (_.random(0, 5) * 2) % 12,
+      x: (_.random(0, 5) * 2) % 4,
       y: Math.floor(i / 6) * y,
       w: 2,
       h: y,
       i: i.toString(),
-      static: Math.random() < 0.05
+      static: Math.random() < 0.05,
     };
   });
 }
