@@ -20,3 +20,7 @@ Created with CodeSandbox
   * OpenFigi does not resolve ISIN to Ticker correctly
   * https://www.lemon.markets/blog/mapping-a-ticker-symbol-to-isin-using-openfigi-and-lemonmarkets
 * Stock Exchange Codes - https://stockmarketmba.com/globalstockexchanges.php
+
+## Next Steps
+
+* Get data from yahoo: https://github.com/ViktorMS/yahoo/blob/master/src/App.js
