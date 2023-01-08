@@ -1,5 +1,6 @@
 import React from "react";
 import SimpleComponent from "./SimpleComponent";
+import depotdata from "./depotdata.json";
 
 export default class DepotComponent extends SimpleComponent {
   constructor(props) {
@@ -27,12 +28,16 @@ export default class DepotComponent extends SimpleComponent {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>MSCI World</td>
-                <td>76,40€</td>
-                <td>80,00€</td>
-                <td>13.120,42€</td>
-              </tr>
+              {depotdata.Positions.map((position) => {
+                return (
+                  <tr>
+                    <td>{position.Name}</td>
+                    <td>{position.Buy}</td>
+                    <td>{position.price}</td>
+                    <td>{position.value}</td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
