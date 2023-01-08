@@ -17,4 +17,5 @@ Created with CodeSandbox
 ### Stock Data Management
 
 * ISIN-Ticker-Database - https://www.openfigi.com
+  * OpenFigi does not resolve ISIN to Ticker correctly
 * Stock Exchange Codes - https://stockmarketmba.com/globalstockexchanges.php
