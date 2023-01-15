@@ -1,7 +1,10 @@
 # musterdepot
 
-* Projektrumpf mit Anleitung https://github.com/rajjeet/react-playbook erzeugt
-  * Versionen html-webpack-plugin, ts-loader, typescript, webpack, webpack-cli und webpack-dev-server waren veraltet und haben zu nicht nachvollziehbaren Fehlern geführt.
+Erstellung des Projektes mit folgenden Schritten:
+* Projektrumpf mit create-react-app erzeugt (`yarn create react-app musterdepot --template typescript`).
+* React-Grid-Layout (https://github.com/react-grid-layout/react-grid-layout) hinzugefügt
+  * `yarn add react-grid-layout`
+  * `yarn add -D @types/react-grid-layout`
 
 ## Pipeline vorbereiten
 
