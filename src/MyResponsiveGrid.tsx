@@ -1,5 +1,6 @@
 import React from "react";
 import { Responsive, WidthProvider } from "react-grid-layout";
+import DepotComponent from "./DepotComponent";
 import "./Grid.css"
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
@@ -25,7 +26,7 @@ class MyResponsiveGrid extends React.Component {
                 cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2}}
             >
                 <div key="a" className="Card">a</div>
-                <div key="b" className="Card">b</div>
+                <div key="b" className="Card"><DepotComponent keynr={1}>b</DepotComponent></div>
                 <div key="c" className="Card">c</div>
             </ResponsiveGridLayout>
         )
