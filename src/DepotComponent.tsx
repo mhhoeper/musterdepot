@@ -1,11 +1,13 @@
 import React from "react";
-import SimpleComponent from "./SimpleComponent";
 import depotdata from "./depotdata.json";
+import "./DepotComponent.css"
 
-export default class DepotComponent extends SimpleComponent {
-  constructor(props) {
-    super(props);
-  }
+export type depotprops = {
+    children: string;
+    keynr: number;
+};
+
+export default class DepotComponent extends React.Component<depotprops> {
 
   /* see https://www.youtube.com/watch?v=dYjdzpZv5yc */
   /* Prevent drag from https://stackoverflow.com/questions/63758425/react-ondragstart-doesnt-fire-in-material-ui-autocomplete-component */
@@ -14,7 +16,7 @@ export default class DepotComponent extends SimpleComponent {
       <div className="depot-container">
         <div>Depot</div>
         <div
-          class="depot-container"
+          className="depot-container2"
           onClick={(evt) => console.log("click")}
           onMouseDown={(event) => event.stopPropagation()}
         >
@@ -33,8 +35,8 @@ export default class DepotComponent extends SimpleComponent {
                   <tr>
                     <td>{position.Name}</td>
                     <td>{position.Buy}</td>
-                    <td>{position.price}</td>
-                    <td>{position.value}</td>
+                    <td>{this.props.keynr}</td>
+                    <td>value</td>
                   </tr>
                 );
               })}
