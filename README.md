@@ -5,6 +5,7 @@ Erstellung des Projektes mit folgenden Schritten:
 * React-Grid-Layout (https://github.com/react-grid-layout/react-grid-layout) hinzugefügt
   * `yarn add react-grid-layout`
   * `yarn add -D @types/react-grid-layout`
+* Der Anleitung auf https://github.com/react-grid-layout/react-grid-layout folgen
 
 ## Pipeline vorbereiten
 

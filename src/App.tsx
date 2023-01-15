@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import MyFirstGrid from "./MyFirstGrid";
+import MyResponsiveGrid from "./MyResponsiveGrid";
 import '/node_modules/react-grid-layout/css/styles.css';
 import '/node_modules/react-resizable/css/styles.css';
 
@@ -9,7 +9,7 @@ function App() {
     <div className="App">
       <header className="App-header">
       </header>
-      <MyFirstGrid />
+      <MyResponsiveGrid />
     </div>
   );
 }

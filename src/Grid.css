@@ -1,13 +1,9 @@
 .Layout {
-    background: #ddd;
-    border: 1px solid black;
-    margin-top: 10px;
-    padding: 10px;
-  }
+  background: #ddd;
+  border: 1px solid black;
+}
 
 .Card {
   background: #ddd;
   border: 1px solid black;
-  margin-top: 10px;
-  padding: 10px;
 }
