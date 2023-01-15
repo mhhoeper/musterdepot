@@ -1,25 +1,39 @@
-import React from "react";
-import Grid from "./Grid"
+import React from 'react';
+import logo from './logo.svg';
+import './App.css';
 
-var styles = require("./styles.css");
-var reactstyles1 = require("../node_modules/react-grid-layout/css/styles.css");
-var reactstyles2 = require("../node_modules/react-resizable/css/styles.css");
-
-function stringifyLayout() {
-    return (<div>test</div>);
+function App() {
+  return (
+    <div className="App">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <p>
+          Edit <code>src/App.tsx</code> and save to reload.
+        </p>
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React
+        </a>
+      </header>
+    </div>
+  );
 }
 
-const App = () => {
-    return ( 
-        <div className="App">
-            <div className="LayoutJSON">
-                Displayed as <code>[x, y, w, h]</code>:
-                <div className="columns">{stringifyLayout()}</div>
-            </div>
-            {/* Hier muss die nächste Komponente rein.  */}
-            <Grid />
-        </div>
-    );
-};
+class A extends React.Component {
+  makeit() {
+    console.log("test");
+  }
+}
+
+class B extends A {
+  makeB() {
+    console.log("it is B");
+  }
+}
+
 
 export default App;
