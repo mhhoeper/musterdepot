@@ -26,4 +26,6 @@ jobs:
     - name: Build React App
       run: yarn build
     - name: Deploy App on Github Pages
-      run: yarn deploy
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        deploy_key: ${{ secrets.ForDeploy }}
