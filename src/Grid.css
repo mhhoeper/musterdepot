@@ -7,3 +7,12 @@
   background: #ddd;
   border: 1px solid black;
 }
+
+.depot-container {
+  height: 100%;
+}
+
+.depot-container2 {
+  height: calc(100% - 40px);
+  overflow: scroll;
+}

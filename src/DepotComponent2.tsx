@@ -10,6 +10,12 @@ interface Person {
 const getPeople = (): Person[] => [
     {name: "Thomas", surname: "Goldman" },
     { name: "Susie", surname: "Quattro" },
+    {name: "Thomas2", surname: "Goldman" },
+    { name: "Susie2", surname: "Quattro" },
+    {name: "Thomas3", surname: "Goldman" },
+    { name: "Susie3", surname: "Quattro" },
+    {name: "Thomas4", surname: "Goldman" },
+    { name: "Susie5", surname: "Quattro" },
     { name: "", surname: "" }
   ];
   
@@ -47,7 +53,12 @@ function DepotComponent2() {
         <div className="depot-container">
             <div>Depot</div>
             <div className="depot-container2">
-                <ReactGrid rows={rows} columns={columns} />
+                <ReactGrid 
+                    rows={rows} 
+                    columns={columns} 
+                    enableRowSelection
+                    stickyTopRows={1}
+                />
             </div>
         </div>
     );
