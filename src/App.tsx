@@ -9,6 +9,7 @@ function App() {
     <div className="App">
       <header className="App-header">
       </header>
+      <div className="App-menu"><a href="https://github.com/mhhoeper/musterdepot">Github Repository</a><br />&nbsp;</div>
       <MyResponsiveGrid />
     </div>
   );
