@@ -16,7 +16,7 @@ Erstellung des Projektes mit folgenden Schritten:
 ## Pipeline vorbereiten
 
 * https://github.com/gitname/react-gh-pages
-* https://dev.to/dyarleniber/setting-up-a-ci-cd-workflow-on-github-actions-for-a-react-app-with-github-pages-and-codecov-4hnp
+* https://github.com/peaceiris/actions-gh-pages
 
 ## Links to start
 
