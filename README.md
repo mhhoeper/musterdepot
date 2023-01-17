@@ -1,5 +1,11 @@
 # musterdepot
 
+## Demo
+
+Auf https://mhhoeper.github.io/musterdepot/ läuft der letzte Stand des main Branches.
+
+## Erstellung der Projektbasis
+
 Erstellung des Projektes mit folgenden Schritten:
 * Projektrumpf mit create-react-app erzeugt (`yarn create react-app musterdepot --template typescript`).
 * React-Grid-Layout (https://github.com/react-grid-layout/react-grid-layout) hinzugefügt
@@ -25,7 +31,7 @@ kann dieser Window Manager sein Layout lokal speichern
 ## Pipeline vorbereiten
 
 * https://github.com/gitname/react-gh-pages
-* https://dev.to/dyarleniber/setting-up-a-ci-cd-workflow-on-github-actions-for-a-react-app-with-github-pages-and-codecov-4hnp
+* https://github.com/peaceiris/actions-gh-pages
 
 ## Links to start
 
