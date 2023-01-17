@@ -1,63 +1,86 @@
 import React from "react";
-import { ReactGrid, Column, Row } from "@silevis/reactgrid";
+import { ReactGrid, Column, Row, Id } from "@silevis/reactgrid";
 import "@silevis/reactgrid/styles.css";
+import depotdata from "./depotdata.json";
 
-interface Person {
-    name: string;
-    surname: string;
+interface TickerType {
+  Exchange: string;
+  Symbol: string;
 }
 
-const getPeople = (): Person[] => [
-    {name: "Thomas", surname: "Goldman" },
-    { name: "Susie", surname: "Quattro" },
-    {name: "Thomas2", surname: "Goldman" },
-    { name: "Susie2", surname: "Quattro" },
-    {name: "Thomas3", surname: "Goldman" },
-    { name: "Susie3", surname: "Quattro" },
-    {name: "Thomas4", surname: "Goldman" },
-    { name: "Susie5", surname: "Quattro" },
-    { name: "", surname: "" }
-  ];
+interface Position {
+    Name: string;
+    ISIN: string;
+    WKN: string;
+    Ticker: TickerType[];
+    Amount: number;
+    Buy: number;
+}
+
+const getPeople = (): Position[] => depotdata.Positions;
   
 const getColumns = (): Column[] => [
-    { columnId: "name", width: 150 },
-    { columnId: "surname", width: 150 }
+    { columnId: "name", width: 150, resizable: true },
+    { columnId: "isin", width: 100, resizable: true },
+    { columnId: "amount", width: 50, resizable: true },
+    { columnId: "buy", width: 70, resizable: true },
+    { columnId: "price", width: 70, resizable: true },
+    { columnId: "value", width: 70, resizable: true }
 ];
   
 const headerRow: Row = {
     rowId: "header",
     cells: [
       { type: "header", text: "Name" },
-      { type: "header", text: "Surname" }
+      { type: "header", text: "ISIN" },
+      { type: "header", text: "Anzahl" },
+      { type: "header", text: "Kaufpreis" },
+      { type: "header", text: "Aktueller Preis" },
+      { type: "header", text: "Wert" }
     ]
 };
 
-const getRows = (people: Person[]): Row[] => [
+const getRows = (people: Position[]): Row[] => [
     headerRow,
   ...people.map<Row>((person, idx) => ({
     rowId: idx,
     cells: [
-      { type: "text", text: person.name },
-      { type: "text", text: person.surname }
+      { type: "text", text: person.Name },
+      { type: "text", text: person.ISIN },
+      { type: "number", value: person.Amount },
+      { type: "number", value: person.Buy },
+      { type: "number", value: 0 },
+      { type: "number", value: 0}
     ]
   }))
 ];
 
 function DepotComponent2() {
-    const [people] = React.useState<Person[]>(getPeople());
+    const [people] = React.useState<Position[]>(getPeople());
+    const [columns, setColumns] = React.useState<Column[]>(getColumns());
 
     const rows = getRows(people);
-    const columns = getColumns();
+
+    const handleColumnResize = (ci: Id, width: number) => {
+      setColumns((prevColumns) => {
+        const columnIndex = prevColumns.findIndex(el => el.columnId ===ci)
+        const resizedColumn = prevColumns[columnIndex];
+        const updatedColumn = { ...resizedColumn, width};
+        prevColumns[columnIndex] = updatedColumn;
+        return [...prevColumns];
+      });
+    }
 
     return (
         <div className="depot-container">
             <div>Depot</div>
-            <div className="depot-container2">
+            <div className="depot-container2" onMouseDown={(event) => event.stopPropagation()}>
                 <ReactGrid 
                     rows={rows} 
                     columns={columns} 
                     enableRowSelection
                     stickyTopRows={1}
+                    onColumnResized={handleColumnResize}
                 />
             </div>
         </div>
