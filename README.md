@@ -2,7 +2,7 @@
 
 ## Demo
 
-Auf https://mhhoeper.github.io/musterdepot/ läuft der letzte Stand des main Branches.
+Auf https://mhhoeper.github.io/musterdepot/ läuft der letzte Stand des `main` Branches.
 
 ## Erstellung der Projektbasis
 
@@ -12,6 +12,13 @@ Erstellung des Projektes mit folgenden Schritten:
   * `yarn add react-grid-layout`
   * `yarn add -D @types/react-grid-layout`
 * Der Anleitung auf https://github.com/react-grid-layout/react-grid-layout folgen
+
+## Merge-Konflikte auflösen
+
+* Ggf. Mergekonflikte in Dateien manuell auflösen
+* Merge-Konflikte in `package.json` manuell auflösen
+* `yarn install` aufrufen (Konflikte in `yarn.lock` werden so automatisch aufgelöst) 
+[[Stackoverflow](https://stackoverflow.com/questions/42939113/how-do-you-resolve-git-conflicts-in-yarn-lock)]
 
 ## Pipeline vorbereiten
 
