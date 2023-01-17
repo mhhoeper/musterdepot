@@ -1,0 +1,32 @@
+name: Musterdepot Deploy
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js 18.3.0
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18.3.0
+    - name: Install yarn
+      uses: borales/actions-yarn@v4
+      with:
+        cmd: install
+    - name: Build React App
+      run: yarn build
+    - name: Deploy App on Github Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./build
