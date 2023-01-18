@@ -52,6 +52,13 @@ kann dieser Window Manager sein Layout lokal speichern
 * Access data from external API - https://www.pluralsight.com/guides/access-data-from-an-external-api-into-a-react-component
 * Another import data from external API - https://dev.to/olenadrugalya/ways-of-getting-data-from-api-in-react-2kpf
 
+### Financial Data Sources
+
+* https://finance.yahoo.com/
+* https://twelvedata.com/
+* https://eodhistoricaldata.com/
+
+
 ### Stock Data Management
 
 * ISIN-Ticker-Database - https://www.openfigi.com
