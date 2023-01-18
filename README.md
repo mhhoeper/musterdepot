@@ -55,6 +55,7 @@ kann dieser Window Manager sein Layout lokal speichern
 ### Financial Data Sources
 
 * https://finance.yahoo.com/
+  * https://algotrading101.com/learn/yahoo-finance-api-guide/
 * https://twelvedata.com/
 * https://eodhistoricaldata.com/
 
