@@ -11,51 +11,38 @@ export type depotprops = {
 };
 
 
-function ShowMe() {
-  const [text, settext] = React.useState("none");
+class TickerValue extends React.Component<{symbol: string}, {value: string}> {
 
-  function onchange(data: yfinancedata) {
-    
-      console.log(data);
-     
-    settext(data.id.concat(data.price.toString()));
+  constructor(props: {symbol: string}) {
+    super(props);
+    this.state = {value: ""};
   }
+  onchange = (data: yfinancedata) => {
+    if (data.id === this.props.symbol) {
+      let value = data.price;
+      let decimalPlaces = 2;
+      this.setState((state) => ({
+        value: Number(Math.round(parseFloat(value + 'e' + decimalPlaces)) + 'e-' + decimalPlaces).toFixed(decimalPlaces),
+      }));
+    } else {
+      // keep last value
+    }
+  };
 
-  let yfinanceObj = YFinance(["GOOGL", "AAPL", "TSLA"], onchange);
+  yfin = YFinance(["GOOGL"], this.onchange);
 
-  return (
-    <div className="ShowMe">
-      <span>{text}</span>
-    </div>
-  );
+  render() {
+    return (
+      <div>{this.state.value}</div>
+    );
+  }
 }
 
-type MyState = {
-  findata: yfinancedata;
-}
 
-export default class DepotComponent extends React.Component<depotprops, MyState> {
+export default class DepotComponent extends React.Component<depotprops> {
 
   /* see https://www.youtube.com/watch?v=dYjdzpZv5yc */
   /* Prevent drag from https://stackoverflow.com/questions/63758425/react-ondragstart-doesnt-fire-in-material-ui-autocomplete-component */
-
-  state: MyState = {
-    findata: new yfinancedata(),
-  };
-
-  yfin: any;
-  
-  constructor(props: depotprops) {
-    super(props);
-    this.yfin = YFinance(['GOOGL', 'AAPL', 'TSLA'], this.onFinchange);
-  }
-
-  onFinchange = (data: yfinancedata) => {
-    this.setState((state) => ({
-      findata: data,
-    }));
-    console.log("Hier");
-  };
 
   render() {
     console.error("render");
@@ -73,7 +60,7 @@ export default class DepotComponent extends React.Component<depotprops, MyState>
                 <th>Name</th>
                 <th>Kaufpreis</th>
                 <th>Aktueller Preis</th>
-                <th><ShowMe /></th>
+                <th>Preis</th>
               </tr>
             </thead>
             <tbody>
@@ -83,7 +70,7 @@ export default class DepotComponent extends React.Component<depotprops, MyState>
                     <td>{position.Name}</td>
                     <td>{position.Buy}</td>
                     <td>{this.props.keynr}</td>
-                    <td>{this.state.findata.price}</td>
+                    <td><TickerValue symbol="GOOGL" /></td>
                   </tr>
                 );
               })}
