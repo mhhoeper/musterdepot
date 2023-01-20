@@ -58,13 +58,13 @@ export default class DepotComponent extends React.Component<depotprops, MyState>
   };
 
   render() {
-    console.log("render");
+    console.error("render");
     return (
       <div className="depot-container">
         <div>Depot</div>
         <div
           className="depot-container2"
-          onClick={(evt) => console.log("click")}
+          onClick={(evt) => console.error("click")}
           onMouseDown={(event) => event.stopPropagation()}
         >
           <table>
