@@ -54,10 +54,13 @@ kann dieser Window Manager sein Layout lokal speichern
 
 ### Financial Data Sources
 
-* https://finance.yahoo.com/
+* https://finance.yahoo.com/ via wss://stream.finance.yahoo.com
   * https://algotrading101.com/learn/yahoo-finance-api-guide/
 * https://twelvedata.com/
 * https://eodhistoricaldata.com/
+
+Beispiele:
+* https://github.com/ViktorMS/yahoo/blob/master/src/App.js
 
 
 ### Stock Data Management
@@ -66,8 +69,3 @@ kann dieser Window Manager sein Layout lokal speichern
   * OpenFigi does not resolve ISIN to Ticker correctly
   * https://www.lemon.markets/blog/mapping-a-ticker-symbol-to-isin-using-openfigi-and-lemonmarkets
 * Stock Exchange Codes - https://stockmarketmba.com/globalstockexchanges.php
-
-## Next Steps
-
-* Get data from yahoo: https://github.com/ViktorMS/yahoo/blob/master/src/App.js
-

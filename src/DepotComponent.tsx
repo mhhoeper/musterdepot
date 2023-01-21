@@ -29,7 +29,7 @@ class TickerValue extends React.Component<{symbol: string}, {value: string}> {
     }
   };
 
-  yfin = YFinance(["GOOGL"], this.onchange);
+  yfin = YFinance([this.props.symbol], this.onchange);
 
   render() {
     return (
@@ -70,7 +70,7 @@ export default class DepotComponent extends React.Component<depotprops> {
                     <td>{position.Name}</td>
                     <td>{position.Buy}</td>
                     <td>{this.props.keynr}</td>
-                    <td><TickerValue symbol="GOOGL" /></td>
+                    <td><TickerValue symbol={position.Ticker.find(x=>x.Exchange === position.SelectedExchange)?.Symbol || ""} /></td>
                   </tr>
                 );
               })}
