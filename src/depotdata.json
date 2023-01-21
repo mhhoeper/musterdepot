@@ -1,11 +1,12 @@
 {
-    "Name": "Erstes Depot",
+    "Name": "Beispieldepot",
     "Positions": [
       {
         "Name": "Vanguard FTSE All-World UCITS ETF",
         "ISIN": "IE00B3RBWM25",
         "WKN": "A1JX52",
         "Ticker": [{ "Exchange": "Frankfurt", "Symbol": "VGWL" }],
+        "SelectedExchange": "Frankfurt",
         "Amount": 20,
         "Buy": 80.34
       },
@@ -14,6 +15,34 @@
         "ISIN": "LU0533033667",
         "WKN": "LYX0GP",
         "Ticker": [{ "Exchange": "Frankfurt", "Symbol": "LYPG" }],
+        "SelectedExchange": "Frankfurt",
+        "Amount": 13,
+        "Buy": 489.12
+      },
+      {
+        "Name": "Bitcoin (USD)",
+        "ISIN": "??",
+        "WKN": "??",
+        "Ticker": [{ "Exchange": "CCC", "Symbol": "BTC-USD" }],
+        "SelectedExchange": "CCC",        
+        "Amount": 1,
+        "Buy": 23500
+      },
+      {
+        "Name": "Vanguard FTSE All-World UCITS ETF",
+        "ISIN": "IE00B3RBWM25",
+        "WKN": "A1JX52",
+        "Ticker": [{ "Exchange": "Frankfurt", "Symbol": "VGWL" }],
+        "SelectedExchange": "Frankfurt",        
+        "Amount": 20,
+        "Buy": 80.34
+      },
+      {
+        "Name": "Lyxor MSCI World Information Technology TR UCITS ETF - C-EUR",
+        "ISIN": "LU0533033667",
+        "WKN": "LYX0GP",
+        "Ticker": [{ "Exchange": "Frankfurt", "Symbol": "LYPG" }],
+        "SelectedExchange": "Frankfurt",        
         "Amount": 13,
         "Buy": 489.12
       },
@@ -22,6 +51,7 @@
         "ISIN": "IE00B3RBWM25",
         "WKN": "A1JX52",
         "Ticker": [{ "Exchange": "Frankfurt", "Symbol": "VGWL" }],
+        "SelectedExchange": "Frankfurt",        
         "Amount": 20,
         "Buy": 80.34
       },
@@ -30,6 +60,7 @@
         "ISIN": "LU0533033667",
         "WKN": "LYX0GP",
         "Ticker": [{ "Exchange": "Frankfurt", "Symbol": "LYPG" }],
+        "SelectedExchange": "Frankfurt",        
         "Amount": 13,
         "Buy": 489.12
       },
@@ -38,6 +69,7 @@
         "ISIN": "IE00B3RBWM25",
         "WKN": "A1JX52",
         "Ticker": [{ "Exchange": "Frankfurt", "Symbol": "VGWL" }],
+        "SelectedExchange": "Frankfurt",        
         "Amount": 20,
         "Buy": 80.34
       },
@@ -46,22 +78,7 @@
         "ISIN": "LU0533033667",
         "WKN": "LYX0GP",
         "Ticker": [{ "Exchange": "Frankfurt", "Symbol": "LYPG" }],
-        "Amount": 13,
-        "Buy": 489.12
-      },
-      {
-        "Name": "Vanguard FTSE All-World UCITS ETF",
-        "ISIN": "IE00B3RBWM25",
-        "WKN": "A1JX52",
-        "Ticker": [{ "Exchange": "Frankfurt", "Symbol": "VGWL" }],
-        "Amount": 20,
-        "Buy": 80.34
-      },
-      {
-        "Name": "Lyxor MSCI World Information Technology TR UCITS ETF - C-EUR",
-        "ISIN": "LU0533033667",
-        "WKN": "LYX0GP",
-        "Ticker": [{ "Exchange": "Frankfurt", "Symbol": "LYPG" }],
+        "SelectedExchange": "Frankfurt",        
         "Amount": 13,
         "Buy": 489.12
       }

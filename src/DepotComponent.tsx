@@ -48,7 +48,7 @@ export default class DepotComponent extends React.Component<depotprops> {
     console.error("render");
     return (
       <div className="depot-container">
-        <div>Depot</div>
+        <div>Depot - {depotdata.Name}</div>
         <div
           className="depot-container2"
           onClick={(evt) => console.error("click")}
