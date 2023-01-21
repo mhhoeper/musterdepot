@@ -5,6 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "firefox",
+            "request": "attach",
+            "name": "Attach",
+            "port": 9222,
+            "pathMappings": [
+                {
+                    "url": "file:///mnt/netdrive/netdrive_mhoeper/devel/react/musterdepot/src",
+                    "path": "${workspaceFolder}/src"
+                },
+            ]
+        },
+        {
             "name": "Launch index.html",
             "type": "firefox",
             "request": "launch",

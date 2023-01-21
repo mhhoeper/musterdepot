@@ -52,14 +52,20 @@ kann dieser Window Manager sein Layout lokal speichern
 * Access data from external API - https://www.pluralsight.com/guides/access-data-from-an-external-api-into-a-react-component
 * Another import data from external API - https://dev.to/olenadrugalya/ways-of-getting-data-from-api-in-react-2kpf
 
+### Financial Data Sources
+
+* https://finance.yahoo.com/ via wss://stream.finance.yahoo.com
+  * https://algotrading101.com/learn/yahoo-finance-api-guide/
+* https://twelvedata.com/
+* https://eodhistoricaldata.com/
+
+Beispiele:
+* https://github.com/ViktorMS/yahoo/blob/master/src/App.js
+
+
 ### Stock Data Management
 
 * ISIN-Ticker-Database - https://www.openfigi.com
   * OpenFigi does not resolve ISIN to Ticker correctly
   * https://www.lemon.markets/blog/mapping-a-ticker-symbol-to-isin-using-openfigi-and-lemonmarkets
 * Stock Exchange Codes - https://stockmarketmba.com/globalstockexchanges.php
-
-## Next Steps
-
-* Get data from yahoo: https://github.com/ViktorMS/yahoo/blob/master/src/App.js
-

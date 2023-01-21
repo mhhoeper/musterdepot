@@ -6,24 +6,19 @@ import "./Grid.css"
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
-function getLayoutsFromSomewhere() {
-    const layout = [
-        { i: "a", x: 0, y: 0, w: 1, h: 2, static: true },
-        { i: "b", x: 1, y: 0, w: 3, h: 2, minW: 2, maxW: 4 },
-        { i: "c", x: 4, y: 0, w: 1, h: 2 },
-        { i: "d", x: 0, y: 2, w: 1, h: 2 }
-    ];
-    return {layout};
-}
-
 class MyResponsiveGrid extends React.Component {
 
     render() {
-        var layouts = getLayoutsFromSomewhere();
+        const layoutlg = [
+            { i: "a", x: 4, y: 0, w: 2, h: 2},
+            { i: "b", x: 0, y: 0, w: 3, h: 2, minW: 2, maxW: 4 },
+            { i: "c", x: 0, y: 3, w: 3, h: 2 },
+            { i: "d", x: 6, y: 0, w: 2, h: 2, static: true  }
+        ];
         return (
             <ResponsiveGridLayout
                 className="Layout"
-                layouts={layouts}
+                layouts={{lg: layoutlg}}
                 breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0}}
                 cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2}}
             >
