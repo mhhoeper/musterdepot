@@ -21,8 +21,8 @@
       },
       {
         "Name": "Bitcoin (USD)",
-        "ISIN": "??",
-        "WKN": "??",
+        "ISIN": "",
+        "WKN": "",
         "Ticker": [{ "Exchange": "CCC", "Symbol": "BTC-USD" }],
         "SelectedExchange": "CCC",        
         "Amount": 1,

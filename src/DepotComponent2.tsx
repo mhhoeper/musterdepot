@@ -1,6 +1,7 @@
 import React from "react";
 import { ReactGrid, Column, Row, Id , Cell, CellTemplate, Uncertain, Compatible, UncertainCompatible, getCellProperty, CellTemplates, DefaultCellTypes } from "@silevis/reactgrid";
 import "@silevis/reactgrid/styles.css";
+import "./DepotComponent2.css"
 import depotdata from "./depotdata.json";
 import YFinance, { yfinancedata } from "yfinance-live";
 
@@ -42,21 +43,43 @@ const headerRow: Row = {
     ]
 };
 
+enum Direction {
+  Up,
+  Down,
+  Unknown
+}
 
-
-class TickerValue extends React.Component<{symbol: string}, {value: string}> {
+class TickerValue extends React.Component<{symbol: string}, {value: number, valuestr: string, direction: Direction, theclass: string}> {
 
   constructor(props: {symbol: string}) {
     super(props);
-    this.state = {value: "none"};
+    this.state = {value: 0, valuestr: "", direction: Direction.Unknown, theclass: ""};
   }
   onchange = (data: yfinancedata) => {
     if (data.id === this.props.symbol) {
       let value = data.price;
+      let lastvalue = this.state.value;
+      let direction = value > lastvalue ? Direction.Up : value < lastvalue ? Direction.Down : Direction.Unknown;
+      let classset = direction === Direction.Up ? "valueUp" : direction === Direction.Down ? "valueDown" : "";
+      if (lastvalue === 0) {
+        direction = Direction.Unknown;
+      }
       let decimalPlaces = 2;
       this.setState((state) => ({
-        value: Number(Math.round(parseFloat(value + 'e' + decimalPlaces)) + 'e-' + decimalPlaces).toFixed(decimalPlaces),
+        value: value,
+        valuestr: Number(Math.round(parseFloat(value + 'e' + decimalPlaces)) + 'e-' + decimalPlaces).toFixed(decimalPlaces),
+        direction: direction,
+        theclass: ""
       }));
+      let intervalId = setInterval(() => {
+        this.setState((state) => ({
+          value: value,
+          valuestr: Number(Math.round(parseFloat(value + 'e' + decimalPlaces)) + 'e-' + decimalPlaces).toFixed(decimalPlaces),
+          direction: direction,
+          theclass: classset
+        }));
+        clearInterval(intervalId);
+      }, 5);
     } else {
       // keep last value
     }
@@ -65,8 +88,9 @@ class TickerValue extends React.Component<{symbol: string}, {value: string}> {
   yfin = YFinance([this.props.symbol], this.onchange);
 
   render() {
+    var color = this.state.direction === Direction.Up ? "green" : this.state.direction === Direction.Down ? "red" : "";
     return (
-      <div>{this.state.value}</div>
+      <div className={this.state.theclass}>{this.state.valuestr}</div>
     );
   }
 }

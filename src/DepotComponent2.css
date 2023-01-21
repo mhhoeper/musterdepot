@@ -1,0 +1,19 @@
+.valueUp {
+  animation-name: blinkgreen;
+  animation-duration: 5s;
+  animation-iteration-count: 1;
+}
+
+.valueDown {
+    animation-name: blinkred;
+    animation-duration: 5s;
+    animation-iteration-count: 1;
+  }
+  
+@keyframes blinkred {
+    5% {background-color: red;}
+}
+
+@keyframes blinkgreen {
+    5% {background-color: green;}
+}
