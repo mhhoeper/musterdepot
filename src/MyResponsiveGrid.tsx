@@ -10,17 +10,17 @@ class MyResponsiveGrid extends React.Component {
 
     render() {
         const layoutlg = [
-            { i: "a", x: 4, y: 0, w: 2, h: 2},
+            { i: "a", x: 4, y: 6, w: 2, h: 2},
             { i: "b", x: 0, y: 0, w: 3, h: 2, minW: 2, maxW: 4 },
             { i: "c", x: 0, y: 3, w: 3, h: 2 },
-            { i: "d", x: 6, y: 0, w: 2, h: 2, static: true  }
+            { i: "d", x: 6, y: 6, w: 2, h: 2, static: true  }
         ];
         return (
             <ResponsiveGridLayout
                 className="Layout"
                 layouts={{lg: layoutlg}}
                 breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0}}
-                cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2}}
+                cols={{ lg: 8, md: 6, sm: 4, xs: 2, xxs: 1}}
             >
                 <div key="a" className="Card">a</div>
                 <div key="b" className="Card"><DepotComponent keynr={1}>b</DepotComponent></div>

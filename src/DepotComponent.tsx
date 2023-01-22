@@ -69,8 +69,8 @@ export default class DepotComponent extends React.Component<depotprops> {
                   <tr>
                     <td>{position.Name}</td>
                     <td>{position.Buy}</td>
-                    <td>{this.props.keynr}</td>
                     <td><TickerValue symbol={position.Ticker.find(x=>x.Exchange === position.SelectedExchange)?.Symbol || ""} /></td>
+                    <td>0</td>
                   </tr>
                 );
               })}
