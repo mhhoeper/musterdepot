@@ -17,3 +17,8 @@
 @keyframes blinkgreen {
     5% {background-color: green;}
 }
+
+#value {
+  width: 100%;
+  text-align: right;
+}

@@ -67,14 +67,14 @@ class TickerValue extends React.Component<{symbol: string}, {value: number, valu
       let decimalPlaces = 2;
       this.setState((state) => ({
         value: value,
-        valuestr: Number(Math.round(parseFloat(value + 'e' + decimalPlaces)) + 'e-' + decimalPlaces).toFixed(decimalPlaces),
+        valuestr: value.toLocaleString('de-DE', {minimumFractionDigits: decimalPlaces, maximumFractionDigits: decimalPlaces}), 
         direction: direction,
         theclass: ""
       }));
       let intervalId = setInterval(() => {
         this.setState((state) => ({
           value: value,
-          valuestr: Number(Math.round(parseFloat(value + 'e' + decimalPlaces)) + 'e-' + decimalPlaces).toFixed(decimalPlaces),
+          valuestr: value.toLocaleString('de-DE', {minimumFractionDigits: decimalPlaces, maximumFractionDigits: decimalPlaces}), 
           direction: direction,
           theclass: classset
         }));
@@ -88,9 +88,8 @@ class TickerValue extends React.Component<{symbol: string}, {value: number, valu
   yfin = YFinance([this.props.symbol], this.onchange);
 
   render() {
-    var color = this.state.direction === Direction.Up ? "green" : this.state.direction === Direction.Down ? "red" : "";
     return (
-      <div className={this.state.theclass}>{this.state.valuestr}</div>
+      <div className={this.state.theclass} id="value">{this.state.valuestr}</div>
     );
   }
 }
@@ -129,7 +128,7 @@ class PriceCellTemplate implements CellTemplate<PriceCell> {
   }
   render(cell: Compatible<PriceCell>, isInEditMode: boolean, onCellChanged: (cell: Compatible<PriceCell>, commit: boolean) => void): React.ReactNode {
     return (
-      <div><TickerValue symbol={cell.symbol} /></div>
+      <div id="value"><TickerValue symbol={cell.symbol} /></div>
     );
   }
 }
@@ -153,7 +152,7 @@ const getRows = (people: Position[]): MyRow[] => [
       { type: "text", text: person.Name },
       { type: "text", text: person.ISIN },
       { type: "number", value: person.Amount },
-      { type: "number", value: person.Buy },
+      { type: "number", value: person.Buy, format: new Intl.NumberFormat('de-DE', {minimumFractionDigits: 2, maximumFractionDigits: 2}) },
       { type: "price", text: "x", symbol: person.Ticker.find(x=>x.Exchange === person.SelectedExchange)?.Symbol || ""},
       { type: "number", value: 0}
     ]
