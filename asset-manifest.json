@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/musterdepot/static/css/main.56278735.css",
-    "main.js": "/musterdepot/static/js/main.260752f7.js",
+    "main.js": "/musterdepot/static/js/main.c34540ba.js",
     "static/js/787.4065b68c.chunk.js": "/musterdepot/static/js/787.4065b68c.chunk.js",
     "index.html": "/musterdepot/index.html",
     "main.56278735.css.map": "/musterdepot/static/css/main.56278735.css.map",
-    "main.260752f7.js.map": "/musterdepot/static/js/main.260752f7.js.map",
+    "main.c34540ba.js.map": "/musterdepot/static/js/main.c34540ba.js.map",
     "787.4065b68c.chunk.js.map": "/musterdepot/static/js/787.4065b68c.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.56278735.css",
-    "static/js/main.260752f7.js"
+    "static/js/main.c34540ba.js"
   ]
 }
