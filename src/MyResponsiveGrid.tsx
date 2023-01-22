@@ -7,9 +7,11 @@ import "./Grid.css"
 
 function getFromLS(key: string): any {
     let ls: any = {};
+    console.log("getFromLS");
     if (global.localStorage) {
         try {
             ls = JSON.parse(global.localStorage.getItem("musterdepot-storage") || "");
+            console.log("This is what we got: " + global.localStorage.getItem("musterdepot-storage"));
         }
         catch (e) {
             // Ignore
@@ -38,6 +40,7 @@ class MyResponsiveGrid extends React.Component<{}, {layouts: ReactGridLayout.Lay
     constructor(props: {}) {
         super(props);
 
+        console.log("read original layout for grid");
         this.state = {
             layouts: JSON.parse(JSON.stringify(originalLayouts))
         };
@@ -52,6 +55,7 @@ class MyResponsiveGrid extends React.Component<{}, {layouts: ReactGridLayout.Lay
     }
 
     onLayoutChange(layout: ReactGridLayout.Layout[], layouts: ReactGridLayout.Layouts) {
+        console.log("onLayoutChange\nlayout:\n" + JSON.stringify(layout) + "\nlayouts:\n" + JSON.stringify(layouts));
         safeToLS("layouts", layouts);
         this.setState({ layouts });
     }
@@ -63,10 +67,12 @@ class MyResponsiveGrid extends React.Component<{}, {layouts: ReactGridLayout.Lay
             { i: "c", x: 0, y: 3, w: 3, h: 2 },
             { i: "d", x: 6, y: 6, w: 2, h: 2, static: true  }
         ];
+        const presetlayouts = {lg: layoutlg};
+        console.log("Compare local storage layout in state variable and old preset:\n" + JSON.stringify(this.state.layouts) + "\n" + JSON.stringify({lg: layoutlg}));
         return (
             <ResponsiveGridLayout
                 className="Layout"
-                layouts={{lg: layoutlg}}
+                layouts={presetlayouts}
                 breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0}}
                 cols={{ lg: 8, md: 6, sm: 4, xs: 2, xxs: 1}}
                 rowHeight={30}
