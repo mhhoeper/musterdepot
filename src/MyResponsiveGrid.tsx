@@ -40,17 +40,9 @@ class MyResponsiveGrid extends React.Component<{}, {layouts: ReactGridLayout.Lay
     constructor(props: {}) {
         super(props);
 
-        console.log("read original layout for grid");
+        console.log("read original layout for grid\n" + JSON.stringify(originalLayouts));
         this.state = {
             layouts: JSON.parse(JSON.stringify(originalLayouts))
-        };
-    }
-
-    static get defaultProps() {
-        return {
-            className: "layout",
-            cols: { lg: 8, md: 6, sm: 4, xs: 2, xxs: 1},
-            rowHeight: 30
         };
     }
 
@@ -68,14 +60,14 @@ class MyResponsiveGrid extends React.Component<{}, {layouts: ReactGridLayout.Lay
             { i: "d", x: 6, y: 6, w: 2, h: 2, static: true  }
         ];
         const presetlayouts = {lg: layoutlg};
-        console.log("Compare local storage layout in state variable and old preset:\n" + JSON.stringify(this.state.layouts) + "\n" + JSON.stringify({lg: layoutlg}));
+        console.log("Compare local storage layout in state variable and old preset:\n" + JSON.stringify(this.state.layouts) + "\n" + JSON.stringify(presetlayouts));
         return (
             <ResponsiveGridLayout
                 className="Layout"
-                layouts={presetlayouts}
+                layouts={this.state.layouts}
                 breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0}}
                 cols={{ lg: 8, md: 6, sm: 4, xs: 2, xxs: 1}}
-                rowHeight={30}
+                rowHeight={140}
                 onLayoutChange={(layout, layouts) =>
                     this.onLayoutChange(layout, layouts)
                 }
