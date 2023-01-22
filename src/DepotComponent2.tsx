@@ -4,6 +4,8 @@ import "@silevis/reactgrid/styles.css";
 import "./DepotComponent2.css"
 import depotdata from "./depotdata.json";
 import YFinance, { yfinancedata } from "yfinance-live";
+import { RandomDataProvider } from "./DataProvider";
+import { getFromLS } from "./LocalStorage";
 
 interface TickerType {
   Exchange: string;
@@ -49,11 +51,22 @@ enum Direction {
   Unknown
 }
 
+var settings = getFromLS("settings") || {yahoo: false};
+var allowyahoo = settings.yahoo;
+
 class TickerValue extends React.Component<{symbol: string}, {value: number, valuestr: string, direction: Direction, theclass: string}> {
+
+  private yfin;
 
   constructor(props: {symbol: string}) {
     super(props);
     this.state = {value: 0, valuestr: "", direction: Direction.Unknown, theclass: ""};
+
+    if (allowyahoo) {
+      this.yfin = YFinance([this.props.symbol], this.onchange);
+    } else {
+      this.yfin = new RandomDataProvider([{ticker: this.props.symbol, data: new yfinancedata({id: this.props.symbol, price: 4000})}], this.onchange)
+    }
   }
   onchange = (data: yfinancedata) => {
     if (data.id === this.props.symbol) {
@@ -84,8 +97,6 @@ class TickerValue extends React.Component<{symbol: string}, {value: number, valu
       // keep last value
     }
   };
-
-  yfin = YFinance([this.props.symbol], this.onchange);
 
   render() {
     return (

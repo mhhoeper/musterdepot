@@ -4,18 +4,28 @@ import React from "react";
 import YFinance, { yfinancedata } from "yfinance-live";
 import depotdata from "./depotdata.json";
 import "./DepotComponent.css"
+import { RandomDataProvider } from "./DataProvider";
+import { getFromLS } from "./LocalStorage";
 
 export type depotprops = {
     children: string;
     keynr: number;
 };
 
+var settings = getFromLS("settings") || {yahoo: false};
+var allowyahoo = settings.yahoo;
 
 class TickerValue extends React.Component<{symbol: string}, {value: string}> {
+  private yfin;
 
   constructor(props: {symbol: string}) {
     super(props);
     this.state = {value: ""};
+    if (allowyahoo) {
+      this.yfin = YFinance([this.props.symbol], this.onchange);
+    } else {
+      this.yfin = new RandomDataProvider([{ticker: this.props.symbol, data: new yfinancedata({id: this.props.symbol, price: 4000})}], this.onchange)
+    }
   }
   onchange = (data: yfinancedata) => {
     if (data.id === this.props.symbol) {
@@ -28,8 +38,6 @@ class TickerValue extends React.Component<{symbol: string}, {value: string}> {
       // keep last value
     }
   };
-
-  yfin = YFinance([this.props.symbol], this.onchange);
 
   render() {
     return (
