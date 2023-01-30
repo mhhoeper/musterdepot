@@ -3,7 +3,7 @@ import { getFromLS, safeToLS } from "./LocalStorage";
 import "./SettingsPanel.css";
 
 export default class SettingsPanel extends React.Component<{}, {settings: any}> {
-    defaultsettings = {yahoo: 0};
+    defaultsettings = {provider: 'Random', updateInterval: 10000};
 
     constructor(props: {}) {
         super(props);
@@ -16,36 +16,73 @@ export default class SettingsPanel extends React.Component<{}, {settings: any}> 
         console.log(JSON.stringify(this.state.settings));
     }
 
-    onSettingsChange(index: number) {
+    private getSettingsStructure() {
+        const thesettings = {
+            provider: this.state.settings.provider,
+            updateInterval: this.state.settings.updateInterval
+        }
+        return thesettings;
+    }
+
+    private storeSettings(settings: any) {
+        safeToLS("settings", settings);
+        this.setState({settings: settings});
+    }
+
+    onSettingsChange(event: React.FormEvent<HTMLSelectElement>) {
+        var providerselection: string = event.currentTarget.value;
         console.log("Settings changed");
 
-        var localsettings = {
-            yahoo: !this.state.settings.yahoo
-        };
+        var localsettings = this.getSettingsStructure();
+        localsettings.provider = providerselection;
 
-        safeToLS("settings", localsettings);
+        this.storeSettings(localsettings);
+    }
 
-        this.setState({settings: localsettings});
+    onSettingsChangeUpdateInterval(event: React.FormEvent<HTMLInputElement>) {
+        var updateIntervalSelection: number = event.currentTarget.valueAsNumber;
+        console.log("UpdateInterval changed");
+
+        var localsettings = this.getSettingsStructure();
+        localsettings.updateInterval = updateIntervalSelection;
+
+        this.storeSettings(localsettings);
     }
 
     render() {
+        const providerSelected = this.state.settings.provider === 'OnVista' ? "OnVista" : "Random";
         return (
             <div className="SettingsPanel">
                 <p>Einstellungen</p>
                 <div>
                     <label>
                         <div className="SettingsChecks">
-                            <input 
-                                type="checkbox" 
-                                disabled={true} 
-                                onChange={() => this.onSettingsChange(5)} 
-                                checked={this.state.settings.yahoo} 
-                            /></div>
+                            <select 
+                                id="provider" 
+                                name="provider"
+                                onChange={e => this.onSettingsChange(e)}
+                                value={providerSelected}
+                                disabled={true}>
+                                <option value="Random" >Random</option>
+                                <option value="OnVista" >OnVista</option>
+                            </select>
+                        </div>
                         <div className="SettingsChecks">
-                            Yahoo! Finance Stream<br/>Yahoo hat Lizenzbedingungen, die beachtet werden müssen. Bevor der Schalter
-                            aktiviert wird, müssen die Bedingungen u.a. in <a href="https://legal.yahoo.com/us/en/yahoo/terms/product-atos/apiforydn/index.html" target="_blank" rel="noreferrer">hier</a>
-                            , <a href="https://legal.yahoo.com/us/en/yahoo/terms/otos/index.html" target="_blank" rel="noreferrer">hier</a> und <a href="https://policies.yahoo.com/us/en/yahoo/terms/index.htm" target="_blank" rel="noreferrer">hier</a> beachtet 
-                            werden. Yahoo! finance API ist nur zur persönlichen Verwendung gedacht. 
+                            Streamauswahl<br/>Bitte vor Nutzung OnVista Lizenzbedingungen berücksichtigen. 
+                            OnVista ist nur zur persönlichen Verwendung gedacht.
+                        </div>
+                    </label>
+                    <br />
+                    <label>
+                        <div className="SettingsChecks">
+                            <input 
+                                type="number" 
+                                id="updateInterval" 
+                                defaultValue={this.state.settings.updateInterval}
+                                onChange={e => this.onSettingsChangeUpdateInterval(e)} />
+                        </div>
+                        <div className="SettingsChecks">
+                            Aktualisierungsintervall<br/>Zeit in ms zwischen den Abfragen der aktuellen Kurse
                         </div>
                     </label>
                 </div>
