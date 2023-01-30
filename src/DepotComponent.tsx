@@ -4,7 +4,7 @@ import React from "react";
 import YFinance, { yfinancedata } from "yfinance-live";
 import depotdata from "./depotdata.json";
 import "./DepotComponent.css"
-import { RandomDataProvider } from "./DataProvider";
+import { RandomDataProvider, IUpdateData } from "./DataProvider";
 import { getFromLS } from "./LocalStorage";
 
 export type depotprops = {
@@ -12,8 +12,7 @@ export type depotprops = {
     keynr: number;
 };
 
-var settings = getFromLS("settings") || {yahoo: false};
-var allowyahoo = settings.yahoo;
+var allowyahoo = (getFromLS("settings") || {provider: "Random"}).provider !== "Random";
 
 class TickerValue extends React.Component<{symbol: string}, {value: string}> {
   private yfin;
@@ -22,20 +21,27 @@ class TickerValue extends React.Component<{symbol: string}, {value: string}> {
     super(props);
     this.state = {value: ""};
     if (allowyahoo) {
-      this.yfin = YFinance([this.props.symbol], this.onchange);
+      this.yfin = YFinance([this.props.symbol], this.onchangeYFinance);
     } else {
-      this.yfin = new RandomDataProvider([{ticker: this.props.symbol, data: new yfinancedata({id: this.props.symbol, price: 4000})}], this.onchange)
+      this.yfin = new RandomDataProvider(this.props.symbol, this.onchange)
     }
   }
-  onchange = (data: yfinancedata) => {
-    if (data.id === this.props.symbol) {
-      let value = data.price;
-      let decimalPlaces = 2;
-      this.setState((state) => ({
-        value: Number(Math.round(parseFloat(value + 'e' + decimalPlaces)) + 'e-' + decimalPlaces).toFixed(decimalPlaces),
-      }));
-    } else {
-      // keep last value
+  onchangeYFinance(data: yfinancedata) {
+    this.onchange({isin: data.id, lastPrice: data.price, additionalData: data});
+  }
+  onchange(data: IUpdateData): void {
+    // if this is the first call, onchange may be called from constructor and thus this is not defined
+    if(this !== undefined) {
+      console.log("data.isin in DepotComponent: " + this);
+      if (data.isin === this.props.symbol) {
+        let value = data.lastPrice;
+        let decimalPlaces = 2;
+        this.setState((state) => ({
+          value: Number(Math.round(parseFloat(value + 'e' + decimalPlaces)) + 'e-' + decimalPlaces).toFixed(decimalPlaces),
+        }));
+      } else {
+        // keep last value
+      }
     }
   };
 
@@ -53,7 +59,6 @@ export default class DepotComponent extends React.Component<depotprops> {
   /* Prevent drag from https://stackoverflow.com/questions/63758425/react-ondragstart-doesnt-fire-in-material-ui-autocomplete-component */
 
   render() {
-    console.error("render");
     return (
       <div className="depot-container">
         <div>Depot - {depotdata.Name}</div>

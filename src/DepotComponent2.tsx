@@ -3,9 +3,7 @@ import { ReactGrid, Column, Row, Id , Cell, CellTemplate, Uncertain, Compatible,
 import "@silevis/reactgrid/styles.css";
 import "./DepotComponent2.css"
 import depotdata from "./depotdata.json";
-import YFinance, { yfinancedata } from "yfinance-live";
-import { RandomDataProvider } from "./DataProvider";
-import { getFromLS } from "./LocalStorage";
+import { getDataProvider, IUpdateData } from "./DataProvider";
 
 interface TickerType {
   Exchange: string;
@@ -15,6 +13,7 @@ interface TickerType {
 interface Position {
     Name: string;
     ISIN: string;
+    onvistaType: string;
     WKN: string;
     Ticker: TickerType[];
     SelectedExchange: string;
@@ -51,51 +50,41 @@ enum Direction {
   Unknown
 }
 
-var settings = getFromLS("settings") || {yahoo: false};
-var allowyahoo = settings.yahoo;
 
-class TickerValue extends React.Component<{symbol: string}, {value: number, valuestr: string, direction: Direction, theclass: string}> {
+class OnVistaValue extends React.Component<{isin: string, onvistaType: string}, {value: number, valuestr: string, direction: Direction, theclass: string}> {
 
-  private yfin;
+  private onvista;
 
-  constructor(props: {symbol: string}) {
+  constructor(props: {isin: string, onvistaType: string}) {
     super(props);
     this.state = {value: 0, valuestr: "", direction: Direction.Unknown, theclass: ""};
 
-    if (allowyahoo) {
-      this.yfin = YFinance([this.props.symbol], this.onchange);
-    } else {
-      this.yfin = new RandomDataProvider([{ticker: this.props.symbol, data: new yfinancedata({id: this.props.symbol, price: 4000})}], this.onchange)
-    }
+    this.onvista = getDataProvider(this.props.isin, this.props.onvistaType, this.onchange);
   }
-  onchange = (data: yfinancedata) => {
-    if (data.id === this.props.symbol) {
-      let value = data.price;
-      let lastvalue = this.state.value;
-      let direction = value > lastvalue ? Direction.Up : value < lastvalue ? Direction.Down : Direction.Unknown;
-      let classset = direction === Direction.Up ? "valueUp" : direction === Direction.Down ? "valueDown" : "";
-      if (lastvalue === 0) {
-        direction = Direction.Unknown;
-      }
-      let decimalPlaces = 2;
+  onchange = (data: IUpdateData) => {
+    let value = data.lastPrice;
+    let lastvalue = this.state.value;
+    let direction = value > lastvalue ? Direction.Up : value < lastvalue ? Direction.Down : Direction.Unknown;
+    let classset = direction === Direction.Up ? "valueUp" : direction === Direction.Down ? "valueDown" : "";
+    if (lastvalue === 0) {
+      direction = Direction.Unknown;
+    }
+    let decimalPlaces = 2;
+    this.setState((state) => ({
+      value: value,
+      valuestr: value.toLocaleString('de-DE', {minimumFractionDigits: decimalPlaces, maximumFractionDigits: decimalPlaces}), 
+      direction: direction,
+      theclass: ""
+    }));
+    let intervalId = setInterval(() => {
       this.setState((state) => ({
         value: value,
         valuestr: value.toLocaleString('de-DE', {minimumFractionDigits: decimalPlaces, maximumFractionDigits: decimalPlaces}), 
         direction: direction,
-        theclass: ""
+        theclass: classset
       }));
-      let intervalId = setInterval(() => {
-        this.setState((state) => ({
-          value: value,
-          valuestr: value.toLocaleString('de-DE', {minimumFractionDigits: decimalPlaces, maximumFractionDigits: decimalPlaces}), 
-          direction: direction,
-          theclass: classset
-        }));
-        clearInterval(intervalId);
-      }, 5);
-    } else {
-      // keep last value
-    }
+      clearInterval(intervalId);
+    }, 5);
   };
 
   render() {
@@ -106,12 +95,12 @@ class TickerValue extends React.Component<{symbol: string}, {value: number, valu
 }
 
 
-
-
 interface PriceCell extends Cell {
   type: 'price';
   text: string;
   symbol: string;
+  isin: string;
+  onvistaType: string;
   date?: Date;
   format?: Intl.DateTimeFormat;
 }
@@ -122,7 +111,9 @@ class PriceCellTemplate implements CellTemplate<PriceCell> {
     const text = getCellProperty(uncertainCell, 'text', 'string');
     const value = parseFloat(text); // TODO more advanced parsing for all text based cells
     const symbol = getCellProperty(uncertainCell, 'symbol', 'string');
-    return { ...uncertainCell, text, value, symbol};
+    const isin = getCellProperty(uncertainCell, 'isin', 'string');
+    const onvistaType = getCellProperty(uncertainCell, 'onvistaType', 'string');
+    return { ...uncertainCell, text, value, symbol, isin, onvistaType};
   }
   handleKeyDown(cell: Compatible<PriceCell>, keyCode: number, ctrl: boolean, shift: boolean, alt: boolean): {
       cell: Compatible<PriceCell>;
@@ -138,8 +129,11 @@ class PriceCellTemplate implements CellTemplate<PriceCell> {
     return "price";
   }
   render(cell: Compatible<PriceCell>, isInEditMode: boolean, onCellChanged: (cell: Compatible<PriceCell>, commit: boolean) => void): React.ReactNode {
+//    return (
+//      <div id="value"><TickerValue symbol={cell.symbol} /></div>
+//    );
     return (
-      <div id="value"><TickerValue symbol={cell.symbol} /></div>
+      <div id="value"><OnVistaValue isin={cell.isin} onvistaType={cell.onvistaType} /></div>
     );
   }
 }
@@ -164,7 +158,7 @@ const getRows = (people: Position[]): MyRow[] => [
       { type: "text", text: person.ISIN },
       { type: "number", value: person.Amount },
       { type: "number", value: person.Buy, format: new Intl.NumberFormat('de-DE', {minimumFractionDigits: 2, maximumFractionDigits: 2}) },
-      { type: "price", text: "x", symbol: person.Ticker.find(x=>x.Exchange === person.SelectedExchange)?.Symbol || ""},
+      { type: "price", text: "x", symbol: person.Ticker.find(x=>x.Exchange === person.SelectedExchange)?.Symbol || "", isin: person.ISIN, onvistaType: person.onvistaType},
       { type: "number", value: 0}
     ]
   }))
