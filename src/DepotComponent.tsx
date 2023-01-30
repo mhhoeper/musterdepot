@@ -1,17 +1,18 @@
 import React from "react";
 
 // see https://github.com/sidpagariya/yfinance-live
-import YFinance, { yfinancedata, YFinanceLive } from "yfinance-live";
+import YFinance, { yfinancedata } from "yfinance-live";
 import depotdata from "./depotdata.json";
 import "./DepotComponent.css"
 import { RandomDataProvider, IUpdateData } from "./DataProvider";
+import { getFromLS } from "./LocalStorage";
 
 export type depotprops = {
     children: string;
     keynr: number;
 };
 
-var allowyahoo = false;
+var allowyahoo = (getFromLS("settings") || {provider: "Random"}).provider !== "Random";
 
 class TickerValue extends React.Component<{symbol: string}, {value: string}> {
   private yfin;
