@@ -3,7 +3,7 @@ import { ReactGrid, Column, Row, Id , Cell, CellTemplate, Uncertain, Compatible,
 import "@silevis/reactgrid/styles.css";
 import "./DepotComponent2.css"
 import depotdata from "./depotdata.json";
-import { RandomDataProvider, getDataProvider, IUpdateData } from "./DataProvider";
+import { getDataProvider, IUpdateData } from "./DataProvider";
 
 interface TickerType {
   Exchange: string;
