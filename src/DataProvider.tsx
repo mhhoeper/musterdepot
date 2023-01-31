@@ -9,7 +9,7 @@ export interface IUpdateData {
     additionalData?: any;
 }
 
-interface IUpdateProcessor {
+export interface IUpdateProcessor {
     (data: IUpdateData): void;
 }
 
