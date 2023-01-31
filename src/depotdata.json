@@ -6,9 +6,6 @@
         "ISIN": "IE00B3RBWM25",
         "WKN": "A1JX52",
         "onvistaType": "funds",
-        "Ticker": [{ "Exchange": "Frankfurt", "Symbol": "VGWL.F" },
-            {"Exchange": "XETRA", "Symbol": "VGWL.DE"}
-          ],
         "SelectedExchange": "XETRA",
         "Amount": 20,
         "Buy": 80.34
@@ -18,7 +15,6 @@
         "ISIN": "LU0533033667",
         "WKN": "LYX0GP",
         "onvistaType": "funds",
-        "Ticker": [{ "Exchange": "XETRA", "Symbol": "LYPG.DE" }],
         "SelectedExchange": "XETRA",
         "Amount": 13,
         "Buy": 489.12
@@ -28,7 +24,6 @@
         "ISIN": "",
         "WKN": "",
         "onvistaType": "a",
-        "Ticker": [{ "Exchange": "CCC", "Symbol": "BTC-USD" }],
         "SelectedExchange": "CCC",        
         "Amount": 1,
         "Buy": 23500
@@ -38,7 +33,6 @@
         "ISIN": "US88160R1014",
         "WKN": "A1CX3T",
         "onvistaType": "stocks",
-        "Ticker": [{ "Exchange": "XETRA", "Symbol": "TL0.DE" }],
         "SelectedExchange": "XETRA",        
         "Amount": 1,
         "Buy": 23500        
