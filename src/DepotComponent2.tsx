@@ -2,20 +2,18 @@ import React from "react";
 import { ReactGrid, Column, Row, Id , Cell, CellTemplate, Uncertain, Compatible, UncertainCompatible, getCellProperty, CellTemplates, DefaultCellTypes } from "@silevis/reactgrid";
 import "@silevis/reactgrid/styles.css";
 import "./DepotComponent2.css"
-import depotdata from "./depotdata.json";
+import filedepotdata from "./depotdata.json";
 import { getDataProvider, IUpdateData } from "./DataProvider";
+import { getFromLS } from "./LocalStorage";
 
-interface TickerType {
-  Exchange: string;
-  Symbol: string;
-}
+const userDepotData = getFromLS('depot');
+var depotdata = userDepotData !== undefined ? userDepotData as typeof filedepotdata : filedepotdata;
 
 interface Position {
     Name: string;
     ISIN: string;
     onvistaType: string;
     WKN: string;
-    Ticker: TickerType[];
     SelectedExchange: string;
     Amount: number;
     Buy: number;
@@ -98,7 +96,6 @@ class OnVistaValue extends React.Component<{isin: string, onvistaType: string}, 
 interface PriceCell extends Cell {
   type: 'price';
   text: string;
-  symbol: string;
   isin: string;
   onvistaType: string;
   date?: Date;
@@ -110,10 +107,9 @@ class PriceCellTemplate implements CellTemplate<PriceCell> {
   getCompatibleCell(uncertainCell: Uncertain<PriceCell>): Compatible<PriceCell> {
     const text = getCellProperty(uncertainCell, 'text', 'string');
     const value = parseFloat(text); // TODO more advanced parsing for all text based cells
-    const symbol = getCellProperty(uncertainCell, 'symbol', 'string');
     const isin = getCellProperty(uncertainCell, 'isin', 'string');
     const onvistaType = getCellProperty(uncertainCell, 'onvistaType', 'string');
-    return { ...uncertainCell, text, value, symbol, isin, onvistaType};
+    return { ...uncertainCell, text, value, isin, onvistaType};
   }
   handleKeyDown(cell: Compatible<PriceCell>, keyCode: number, ctrl: boolean, shift: boolean, alt: boolean): {
       cell: Compatible<PriceCell>;
@@ -158,7 +154,7 @@ const getRows = (people: Position[]): MyRow[] => [
       { type: "text", text: person.ISIN },
       { type: "number", value: person.Amount },
       { type: "number", value: person.Buy, format: new Intl.NumberFormat('de-DE', {minimumFractionDigits: 2, maximumFractionDigits: 2}) },
-      { type: "price", text: "x", symbol: person.Ticker.find(x=>x.Exchange === person.SelectedExchange)?.Symbol || "", isin: person.ISIN, onvistaType: person.onvistaType},
+      { type: "price", text: "x", isin: person.ISIN, onvistaType: person.onvistaType},
       { type: "number", value: 0}
     ]
   }))

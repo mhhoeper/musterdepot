@@ -1,7 +1,6 @@
 import React from "react";
 import ReactGridLayout, { Responsive, WidthProvider } from "react-grid-layout";
 import { getFromLS, safeToLS } from "./LocalStorage";
-import DepotComponent from "./DepotComponent";
 import DepotComponent2 from "./DepotComponent2";
 import "./Grid.css"
 
@@ -47,7 +46,7 @@ class MyResponsiveGrid extends React.Component<{}, {layouts: ReactGridLayout.Lay
                 }
             >
                 <div key="a" className="Card">a</div>
-                <div key="b" className="Card"><DepotComponent keynr={1}>b</DepotComponent></div>
+                <div key="b" className="Card">b</div>
                 <div key="c" className="Card"><DepotComponent2 /></div>
                 <div key="d" className="Card">d</div>
             </ResponsiveGridLayout>

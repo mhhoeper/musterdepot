@@ -54,13 +54,15 @@ kann dieser Window Manager sein Layout lokal speichern
 
 ### Financial Data Sources
 
+* OnVista
+  * https://pypi.org/project/pyonvista/
+  * https://forum.portfolio-performance.info/t/historische-kurse-von-onvista-nicht-mehr-lesbar/14794/148?page=5
 * https://finance.yahoo.com/ via wss://stream.finance.yahoo.com
   * https://algotrading101.com/learn/yahoo-finance-api-guide/
+  * https://github.com/ViktorMS/yahoo/blob/master/src/App.js - Beispiel
 * https://twelvedata.com/
 * https://eodhistoricaldata.com/
 
-Beispiele:
-* https://github.com/ViktorMS/yahoo/blob/master/src/App.js
 
 
 ### Stock Data Management
