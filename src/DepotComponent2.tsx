@@ -24,11 +24,6 @@ interface Position {
     percToBuy?: number;
 }
 
-interface IUpdateListener {
-  field: string;
-  onchange: IUpdateProcessor;
-}
-
 class DepotModel {
   positions: Position[];
   valueBuy: number;
