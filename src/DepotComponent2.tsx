@@ -139,21 +139,23 @@ class OnVistaValue extends React.Component<{isin: string, onvistaType: string}, 
       direction = Direction.Unknown;
     }
     let decimalPlaces = 2;
-    this.setState((state) => ({
-      value: value,
-      valuestr: value.toLocaleString('de-DE', {minimumFractionDigits: decimalPlaces, maximumFractionDigits: decimalPlaces}), 
-      direction: direction,
-      theclass: ""
-    }));
-    let intervalId = setInterval(() => {
+    if(lastvalue !== value) {
       this.setState((state) => ({
         value: value,
         valuestr: value.toLocaleString('de-DE', {minimumFractionDigits: decimalPlaces, maximumFractionDigits: decimalPlaces}), 
         direction: direction,
-        theclass: classset
+        theclass: ""
       }));
-      clearInterval(intervalId);
-    }, 5);
+      let intervalId = setInterval(() => {
+        this.setState((state) => ({
+          value: value,
+          valuestr: value.toLocaleString('de-DE', {minimumFractionDigits: decimalPlaces, maximumFractionDigits: decimalPlaces}), 
+          direction: direction,
+          theclass: classset
+        }));
+        clearInterval(intervalId);
+      }, 5);
+    }
   };
 
   render() {
