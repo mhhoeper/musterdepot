@@ -71,9 +71,6 @@ class DepotModel {
     position.percToBuy = ((position.valueNow / position.valueBuy) - 1) * 100;
     if(oldPrice) {
       position.direction = (newPrice - oldPrice > 0.01) ? Direction.Up : ( (newPrice - oldPrice < -0.01) ? Direction.Down : Direction.Unknown);
-      if(position.direction !== Direction.Unknown) {
-        console.log(position.direction);
-      }
     } else {
       position.direction = Direction.Unknown
     }
