@@ -5,20 +5,30 @@
 }
 
 .valueDown {
-    animation-name: blinkred;
-    animation-duration: 5s;
-    animation-iteration-count: 1;
-  }
+  animation-name: blinkred;
+  animation-duration: 5s;
+  animation-iteration-count: 1;
+}
+
+.posvalue {
+  color: forestgreen;
+}
+
+.negvalue {
+  color: red;
+}
   
+
 @keyframes blinkred {
-    5% {background-color: red;}
+  5% {background-color: red;}
 }
 
 @keyframes blinkgreen {
-    5% {background-color: green;}
+  5% {background-color: green;}
 }
 
 #value {
   width: 100%;
   text-align: right;
 }
+

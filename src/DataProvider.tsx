@@ -67,7 +67,7 @@ export class OnVistaProvider extends BaseProvider {
         this.onvistaType = onvistaType;
         this.intervalId = setInterval( () => {
             this.queryInstrument();
-        }, settings.updateInterval);
+        }, settings.updateInterval+ 2000 + Math.floor(Math.random() * 4000) - 2000);
         this.ondata = [ondata];
     }
     stop(): void {
