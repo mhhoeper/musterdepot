@@ -6,6 +6,7 @@ var settings = getFromLS("settings") || {provider: 'Random', updateInterval: 100
 export interface IUpdateData {
     isin: string;
     lastPrice: number;
+    market: string;
     additionalData?: any;
 }
 
@@ -42,7 +43,7 @@ export class RandomDataProvider extends BaseProvider {
             this.price += Math.floor(Math.random() * 20) - 10;
             const thisobj = this;
             this.ondata.forEach(function (value) {
-                value({isin: thisobj.isin, lastPrice: thisobj.price});
+                value({isin: thisobj.isin, lastPrice: thisobj.price, market: "Test"});
             });
             this.intervalId = this.createNewInterval();
           }, settings.updateInterval + Math.floor(Math.random() * 3000));
@@ -86,8 +87,25 @@ export class OnVistaProvider extends BaseProvider {
                 .then(function(myJson) {
                     useobj.data = myJson;
                     if(!('statusCode' in useobj.data) || useobj.data.statusCode !== 404 ) {
+                        // Check if Tradegate quote is available
+                        let bestquote = useobj.data.quote.last;
+                        let market = useobj.data.quote.market.name;
+                        try {
+                            if(useobj.data.quoteList) {
+                                useobj.data.quoteList.list.forEach(function (quote: any) {
+                                    if (quote.market.codeExchange === "GAT") {
+                                        bestquote = quote.last;
+                                        market = quote.market.name;
+                                    }
+                                });
+                            }
+                        }
+                        catch(e) {
+                            console.log(e);
+                            console.log(useobj.data);
+                        }
                         useobj.ondata.forEach(function (value) {
-                            value({isin: useobj.data.instrument.isin, lastPrice: useobj.data.quote.last, additionalData: useobj.data});
+                            value({isin: useobj.data.instrument.isin, lastPrice: bestquote, market: market, additionalData: useobj.data});
                         });
                     }
                 });

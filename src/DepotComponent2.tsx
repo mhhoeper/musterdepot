@@ -131,14 +131,17 @@ class DepotModel {
     this.informListener("valueNow", {
       isin: "valueNow", 
       lastPrice: this.valueNow,
+      market: "",
       valueBuy: 0, valueNow: 0, diffToBuy: 0, percToBuy: 0, direction: direction});
     this.informListener("diffToBuy", {
       isin: "diffToBuy", 
       lastPrice: this.diffToBuy,
+      market: "",
       valueBuy: 0, valueNow: 0, diffToBuy: 0, percToBuy: 0, direction: direction});
     this.informListener("percToBuy", {
       isin: "percToBuy", 
       lastPrice: this.percToBuy,
+      market: "",
       valueBuy: 0, valueNow: 0, diffToBuy: 0, percToBuy: 0, direction: direction});
   }
   registerListener(field: string, type: TIsinProp, onchange: IDepotModelUpdateProcessor): void {
@@ -163,7 +166,8 @@ const getColumns = (): Column[] => [
     { columnId: "buyValue", width: 70, resizable: true },
     { columnId: "value", width: 70, resizable: true },
     { columnId: "diffToBuy", width: 70, resizable: true },
-    { columnId: "percToBuy", width: 70, resizable: true }
+    { columnId: "percToBuy", width: 70, resizable: true },
+    { columnId: "market", width: 50, resizable: true}
 ];
   
 const headerRow: Row = {
@@ -177,7 +181,8 @@ const headerRow: Row = {
       { type: "header", text: "Kaufwert" },
       { type: "header", text: "Wert" },
       { type: "header", text: "Diff" },
-      { type: "header", text: "Diff %" }
+      { type: "header", text: "Diff %" },
+      { type: "header", text: "Börse"}
     ]
 };
 
@@ -243,6 +248,31 @@ class OnVistaValue extends React.Component<{isin: string, isinType: TIsinProp, o
   }
 }
 
+
+class UpdateValue extends React.Component<{isin: string}, {market: string}> {
+
+  //private onvista;
+
+  constructor(props: {isin: string}) {
+    super(props);
+    this.state = {market: ""};
+
+    //this.onvista = getDataProvider(this.props.isin, this.props.onvistaType, this.onchange);
+    depotModel.registerListener(this.props.isin, TIsinProp.ValueNow, this.onchange);
+  }
+  onchange = (data: IDepotModelUpdateData) => {
+    let market = data.market;
+    this.setState((state) => ({
+      market: market
+    }));
+  }
+
+  render() {
+    return (
+      <div>{this.state.market}</div>
+    );
+  }
+}
 
 interface PriceCell extends Cell {
   type: 'price';
@@ -399,16 +429,53 @@ class PricePercCellTemplate implements CellTemplate<PricePercentageCell> {
 
 
 
-const myCellTemplates: CellTemplates = {
-  price: new PriceCellTemplate(),
-  valueNow: new ValueCellTemplate(),
-  priceDiff: new PriceDiffCellTemplate(),
-  pricePerc: new PricePercCellTemplate()
+interface MarketCell extends Cell {
+  type: 'market';
+  market: string;
+  isin: string;
 }
 
 
 
-interface MyRow extends Row<DefaultCellTypes | PriceCell | ValueCell | PriceDiffCell | PricePercentageCell> {
+class MarketCellTemplate implements CellTemplate<MarketCell> {
+  getCompatibleCell(uncertainCell: Uncertain<MarketCell>): Compatible<MarketCell> {
+    const market = getCellProperty(uncertainCell, 'market', 'string') || "";
+    const isin = getCellProperty(uncertainCell, 'isin', 'string');
+    return { ...uncertainCell, text: market, value: NaN, market: market, isin: isin};
+  }
+  handleKeyDown(cell: Compatible<MarketCell>, keyCode: number, ctrl: boolean, shift: boolean, alt: boolean): {
+      cell: Compatible<MarketCell>;
+      enableEditMode: boolean;
+  } {
+    return { cell, enableEditMode: false};  
+  }
+  update(cell: Compatible<MarketCell>, cellToMerge: UncertainCompatible<MarketCell>): Compatible<MarketCell> {
+    return this.getCompatibleCell({ ...cell, market: cellToMerge.text});
+  }
+
+  getClassName(cell: Compatible<MarketCell>, isInEditMode: boolean): string {
+    return "market";
+  }
+  render(cell: Compatible<MarketCell>, isInEditMode: boolean, onCellChanged: (cell: Compatible<MarketCell>, commit: boolean) => void): React.ReactNode {
+    return (
+      <div id="value"><UpdateValue isin={cell.isin} /></div>
+    );
+  }
+}
+
+
+
+const myCellTemplates: CellTemplates = {
+  price: new PriceCellTemplate(),
+  valueNow: new ValueCellTemplate(),
+  priceDiff: new PriceDiffCellTemplate(),
+  pricePerc: new PricePercCellTemplate(),
+  market: new MarketCellTemplate()
+}
+
+
+
+interface MyRow extends Row<DefaultCellTypes | PriceCell | ValueCell | PriceDiffCell | PricePercentageCell | MarketCell> {
 
 }
 
@@ -426,7 +493,8 @@ const getRows = (people: Position[]): MyRow[] => [
       { type: "number", value: person.valueBuy || 0},
       { type: "valueNow", text: "x", isin: person.ISIN, onvistaType: person.onvistaType},
       { type: "priceDiff", text: "x", isin: person.ISIN, onvistaType: person.onvistaType},
-      { type: "pricePerc", text: "x", isin: person.ISIN, onvistaType: person.onvistaType}
+      { type: "pricePerc", text: "x", isin: person.ISIN, onvistaType: person.onvistaType},
+      { type: "market", market: "x", isin: person.ISIN}
     ]
   }))
 ];
