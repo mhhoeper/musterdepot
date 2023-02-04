@@ -1,6 +1,17 @@
-import { getFromLS } from "./LocalStorage";
+import { getFromLS, safeToLS } from "./LocalStorage";
 
-var settings = getFromLS("settings") || {provider: 'Random', updateInterval: 10000};
+const defaultsettings = {provider: 'Random', updateInterval: 10000};
+var settings = getFromLS("settings") || defaultsettings;
+
+if (settings.provider === undefined || settings.provider === null) {
+    settings.provider = defaultsettings.provider;
+}
+if (settings.updateInterval === undefined || settings.updateInterval === null) {
+    settings.updateInterval = defaultsettings.updateInterval;
+}
+safeToLS("settings", settings);
+
+
 
 
 export interface IUpdateData {
