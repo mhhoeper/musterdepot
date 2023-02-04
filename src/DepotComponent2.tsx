@@ -7,7 +7,7 @@ import { getDataProvider, IUpdateData } from "./DataProvider";
 import { getFromLS } from "./LocalStorage";
 
 const userDepotData = getFromLS('depot');
-var depotdata = userDepotData !== undefined ? userDepotData as typeof filedepotdata : filedepotdata;
+var depotdata = ((userDepotData === undefined) || (userDepotData === null)) ? filedepotdata : userDepotData as typeof filedepotdata;
 
 enum Direction {
   Up = 1,
