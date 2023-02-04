@@ -15,4 +15,5 @@
 .depot-container2 {
   height: calc(100% - 40px);
   overflow: scroll;
+  font-size: 0.8em;
 }
