@@ -5,23 +5,35 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "firefox",
-            "request": "attach",
-            "name": "Attach",
-            "port": 9222,
-            "pathMappings": [
-                {
-                    "url": "file:///mnt/netdrive/netdrive_mhoeper/devel/react/musterdepot/src",
-                    "path": "${workspaceFolder}/src"
-                },
-            ]
-        },
-        {
             "name": "Launch index.html",
             "type": "firefox",
             "request": "launch",
             "reAttach": true,
             "file": "${workspaceFolder}/index.html"
+        },
+        {
+            // This is how you get the debugging to work:
+            // start 'yarn start' and wait until firefox is running the page
+            // start debug in vscode with the configuration 'Lauch localhost debug'
+            "name": "Launch localhost debug",
+            "type": "firefox",
+            "request": "launch",
+            "reAttach": true,
+            "firefoxExecutable": "/usr/bin/firefox",
+            "url": "http://localhost:3000/musterdepot/",
+            "skipFiles": [
+                "${workspaceFolder}/node_modules/**"
+            ],
+            "pathMappings": [
+                {
+                    "url": "file:///mnt/netdrive/netdrive_mhoeper/devel/react/musterdepot/src",
+                    "path": "${workspaceFolder}/src"
+                },
+                {
+                    "url": "webpack:///",
+                    "path": "${workspaceFolder}/src/"
+                }
+            ]
         }
     ]
 }
