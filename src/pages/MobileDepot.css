@@ -1,0 +1,32 @@
+.MobileDepot table  {
+    width: 100vw;
+}
+
+#summarize {
+    background: #202020;
+    color: #ffffff;
+}
+
+.summarize1 {
+    position: relative;
+    top: 0px;
+    left: 0px;
+    z-index: 1;
+}
+
+.summarize2 { 
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    z-index: 2;
+}
+
+.summarize2 p {
+    text-align: right;
+    margin: 5px;
+}
+
+.depotvalue {
+    margin: 0px;
+    font-size: 3em;
+}
