@@ -11,7 +11,7 @@ enum Direction {
   Unknown
 }
 
-enum TIsinProp {
+export enum TIsinProp {
   PriceNow,
   ValueNow,
   Diff,
@@ -189,15 +189,10 @@ const headerRow: Row = {
 
 
 
-class OnVistaValue extends React.Component<{isin: string, isinType: TIsinProp, onvistaType: string}, {value: number, valuestr: string, direction: Direction, theclass: string, signcolor: string}> {
-
-  //private onvista;
-
+export class OnVistaValue extends React.Component<{isin: string, isinType: TIsinProp, onvistaType: string}, {value: number, valuestr: string, direction: Direction, theclass: string, signcolor: string}> {
   constructor(props: {isin: string, isinType: TIsinProp, onvistaType: string}) {
     super(props);
     this.state = {value: 0, valuestr: "", direction: Direction.Unknown, theclass: "", signcolor: ""};
-
-    //this.onvista = getDataProvider(this.props.isin, this.props.onvistaType, this.onchange);
     depotModel.registerListener(this.props.isin, this.props.isinType, this.onchange);
   }
   onchange = (data: IDepotModelUpdateData) => {
@@ -207,23 +202,35 @@ class OnVistaValue extends React.Component<{isin: string, isinType: TIsinProp, o
     let direction = data.direction;
     let classset = "";
     let signcolor = "";
+    let prefix = "";
+    let suffix = "";
     if(lastvalue !== value) {
       if(this.props.isinType === TIsinProp.PriceNow) {
         // keep everything like it is
+        suffix = " €";
       } else if(this.props.isinType === TIsinProp.ValueNow) {
         value = data.valueNow;
+        suffix = " €";
       } else if(this.props.isinType === TIsinProp.Diff) {
         value = data.diffToBuy;
+        if(value>0) {
+          prefix = "+";
+        }
+        suffix = " €";
       } else {
         // TIsinProp.Percentage
         value = data.percToBuy;
+        if(value>0) {
+          prefix = "+";
+        }
+        suffix = " %"; 
       }
       classset = direction === Direction.Up ? "valueUp" : ( direction === Direction.Down ? "valueDown" : "" );
       signcolor = (this.props.isinType === TIsinProp.Diff) || (this.props.isinType === TIsinProp.Percentage) ? 
         ((value > 0) ? "posvalue" : ((value < 0) ? "negvalue" : "")) : "";
       this.setState((state) => ({
         value: value,
-        valuestr: value.toLocaleString('de-DE', {minimumFractionDigits: decimalPlaces, maximumFractionDigits: decimalPlaces}), 
+        valuestr: prefix+value.toLocaleString('de-DE', {minimumFractionDigits: decimalPlaces, maximumFractionDigits: decimalPlaces})+suffix, 
         direction: direction,
         theclass: "",
         signcolor: signcolor
@@ -231,7 +238,7 @@ class OnVistaValue extends React.Component<{isin: string, isinType: TIsinProp, o
       let intervalId = setInterval(() => {
         this.setState((state) => ({
           value: value,
-          valuestr: value.toLocaleString('de-DE', {minimumFractionDigits: decimalPlaces, maximumFractionDigits: decimalPlaces}), 
+          valuestr: prefix+value.toLocaleString('de-DE', {minimumFractionDigits: decimalPlaces, maximumFractionDigits: decimalPlaces})+suffix, 
           direction: direction,
           theclass: classset,
           signcolor: signcolor
@@ -243,21 +250,16 @@ class OnVistaValue extends React.Component<{isin: string, isinType: TIsinProp, o
 
   render() {
     return (
-      <div className={this.state.theclass + " " + this.state.signcolor} id="value">{this.state.valuestr}</div>
+      <span className={this.state.theclass + " " + this.state.signcolor} id="value">{this.state.valuestr}</span>
     );
   }
 }
 
 
-class UpdateValue extends React.Component<{isin: string}, {market: string}> {
-
-  //private onvista;
-
+export class UpdateValue extends React.Component<{isin: string}, {market: string}> {
   constructor(props: {isin: string}) {
     super(props);
     this.state = {market: ""};
-
-    //this.onvista = getDataProvider(this.props.isin, this.props.onvistaType, this.onchange);
     depotModel.registerListener(this.props.isin, TIsinProp.ValueNow, this.onchange);
   }
   onchange = (data: IDepotModelUpdateData) => {
@@ -266,10 +268,9 @@ class UpdateValue extends React.Component<{isin: string}, {market: string}> {
       market: market
     }));
   }
-
   render() {
     return (
-      <div>{this.state.market}</div>
+      <span>{this.state.market}</span>
     );
   }
 }

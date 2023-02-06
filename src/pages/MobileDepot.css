@@ -1,5 +1,10 @@
 .MobileDepot table  {
     width: 100vw;
+    border-collapse: collapse;
+}
+
+.MobileDepot tr {
+    border-bottom: 1px solid black;
 }
 
 #summarize {
@@ -7,26 +12,39 @@
     color: #ffffff;
 }
 
-.summarize1 {
+.mobileValuesLeft {
     position: relative;
     top: 0px;
     left: 0px;
-    z-index: 1;
 }
 
-.summarize2 { 
+.mobileValuesRight { 
     position: absolute;
     top: 0px;
     right: 0px;
-    z-index: 2;
 }
 
-.summarize2 p {
+.mobileValuesLeft p {
+    margin: 4px;
+}
+
+.mobileValuesRight p {
     text-align: right;
-    margin: 5px;
+    margin: 4px;
 }
 
 .depotvalue {
     margin: 0px;
-    font-size: 3em;
+    font-size: 2em;
+}
+
+tr.MobileDepot > * .rowheader {
+    color: black;
+    font-size: 1em;
+}
+
+tr.MobileDepot > div > * {
+    color: rgb(180, 180, 180);
+    font-size: 0.9em;
+
 }
