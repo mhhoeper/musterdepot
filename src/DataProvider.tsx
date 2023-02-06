@@ -1,4 +1,4 @@
-import { getFromLS, safeToLS } from "./LocalStorage";
+import { getFromLS, safeToLS } from "./components/configdata/LocalStorage";
 
 const defaultsettings = {provider: 'Random', updateInterval: 10000};
 var settings = getFromLS("settings") || defaultsettings;

@@ -2,12 +2,8 @@ import React from "react";
 import { ReactGrid, Column, Row, Id , Cell, CellTemplate, Uncertain, Compatible, UncertainCompatible, getCellProperty, CellTemplates, DefaultCellTypes } from "@silevis/reactgrid";
 import "@silevis/reactgrid/styles.css";
 import "./DepotComponent2.css"
-import filedepotdata from "./depotdata.json";
 import { getDataProvider, IUpdateData } from "./DataProvider";
-import { getFromLS } from "./LocalStorage";
-
-const userDepotData = getFromLS('depot');
-var depotdata = ((userDepotData === undefined) || (userDepotData === null)) ? filedepotdata : userDepotData as typeof filedepotdata;
+import DepotDataManager, { IDepotDataDepotPosition } from './components/configdata/DepotData';
 
 enum Direction {
   Up = 1,
@@ -26,10 +22,10 @@ interface Position {
     Name: string;
     ISIN: string;
     onvistaType: string;
-    WKN: string;
+    WKN?: string;
     SelectedExchange: string;
     Amount: number;
-    Buy: number;
+    PriceBuy: number;
     priceNow?: number;
     valueBuy?: number;
     valueNow?: number;
@@ -65,7 +61,7 @@ class DepotModel {
   private updatePosition(position: Position, newPrice: number) {
     let oldPrice = position.priceNow;
     position.priceNow = newPrice;
-    position.valueBuy = position.Buy * position.Amount;
+    position.valueBuy = position.PriceBuy * position.Amount;
     position.valueNow = position.priceNow * position.Amount;
     position.diffToBuy = position.valueNow - position.valueBuy;
     position.percToBuy = ((position.valueNow / position.valueBuy) - 1) * 100;
@@ -92,14 +88,15 @@ class DepotModel {
   constructor(positions: Position[]) {
     this.positions = positions;
     this.positions.forEach(position => {
-      position.valueBuy = position.Amount * position.Buy;
+      position.valueBuy = position.Amount * position.PriceBuy;
     });
     this.valueBuy = this.calcValueBuy(positions);
     this.valueNow = this.calcValueNow(positions);
     this.diffToBuy = this.valueNow - this.valueBuy;
     this.percToBuy = 1 - (this.valueBuy / this.valueNow);
     positions.forEach(position => {
-      getDataProvider(position.ISIN, position.onvistaType, this.onchange);
+      const onvistaType = (position.onvistaType === undefined) ? "" : position.onvistaType;
+      getDataProvider(position.ISIN, onvistaType, this.onchange);
     });
     this.listenerRegister = new Map<string, IDepotModelListener[]>();
   }
@@ -151,11 +148,14 @@ class DepotModel {
       this.listenerRegister.get(field)!.push({dataType: type, updateProcessor: onchange});
     }
   }
+  getPositions() {
+    return this.positions;
+  }
 }
 
-const depotModel = new DepotModel(depotdata.Positions);
+const depotModel = new DepotModel(DepotDataManager.getDepotDataManager().depotdata.entities[0].Positions as IDepotDataDepotPosition[]);
 
-const getPeople = (): Position[] => depotdata.Positions;
+const getPeople = (): Position[] => depotModel.getPositions();
   
 const getColumns = (): Column[] => [
     { columnId: "name", width: 150, resizable: true },
@@ -488,7 +488,7 @@ const getRows = (people: Position[]): MyRow[] => [
       { type: "text", text: person.Name },
       { type: "text", text: person.ISIN },
       { type: "number", value: person.Amount },
-      { type: "number", value: person.Buy, format: new Intl.NumberFormat('de-DE', {minimumFractionDigits: 2, maximumFractionDigits: 2}) },
+      { type: "number", value: person.PriceBuy, format: new Intl.NumberFormat('de-DE', {minimumFractionDigits: 2, maximumFractionDigits: 2}) },
       { type: "price", text: "x", isin: person.ISIN, onvistaType: person.onvistaType},
       { type: "number", value: person.valueBuy || 0},
       { type: "valueNow", text: "x", isin: person.ISIN, onvistaType: person.onvistaType},
@@ -517,7 +517,7 @@ function DepotComponent2() {
 
     return (
         <div className="depot-container">
-            <div>Depot - {depotdata.Name}</div>
+            <div>Depot - {DepotDataManager.getDepotDataManager().depotdata.entities[0].Name}</div>
             <div><table>
               <tr>
                 <td>Gesamt:&nbsp;&nbsp;</td>

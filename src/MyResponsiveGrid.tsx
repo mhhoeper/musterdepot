@@ -1,6 +1,6 @@
 import React from "react";
 import ReactGridLayout, { Responsive, WidthProvider } from "react-grid-layout";
-import { getFromLS, safeToLS } from "./LocalStorage";
+import { getFromLS, safeToLS } from "./components/configdata/LocalStorage";
 import DepotComponent2 from "./DepotComponent2";
 import "./Grid.css"
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { getFromLS, safeToLS } from "./LocalStorage";
+import { getFromLS, safeToLS } from "./components/configdata/LocalStorage";
 import "./SettingsPanel.css";
 
 export default class SettingsPanel extends React.Component<{}, {settings: any}> {

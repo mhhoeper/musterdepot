@@ -1,4 +1,5 @@
 {
+  "entities": [{
     "Name": "Beispieldepot",
     "Positions": [
       {
@@ -38,5 +39,6 @@
         "Buy": 23500        
       }
     ]
-  }
+  }]
+}
   
