@@ -9,7 +9,7 @@
         "onvistaType": "funds",
         "SelectedExchange": "XETRA",
         "Amount": 20,
-        "Buy": 80.34
+        "PriceBuy": 80.34
       },
       {
         "Name": "Lyxor MSCI World Information Technology TR UCITS ETF - C-EUR",
@@ -18,7 +18,7 @@
         "onvistaType": "funds",
         "SelectedExchange": "XETRA",
         "Amount": 13,
-        "Buy": 489.12
+        "PriceBuy": 489.12
       },
       {
         "Name": "Bitcoin (USD)",
@@ -27,7 +27,7 @@
         "onvistaType": "a",
         "SelectedExchange": "CCC",        
         "Amount": 1,
-        "Buy": 23500
+        "PriceBuy": 23500
       },
       {
         "Name": "Tesla",
@@ -36,7 +36,7 @@
         "onvistaType": "stocks",
         "SelectedExchange": "XETRA",        
         "Amount": 1,
-        "Buy": 23500        
+        "PriceBuy": 23500        
       }
     ]
   }]

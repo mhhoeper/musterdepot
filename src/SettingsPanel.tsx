@@ -2,16 +2,26 @@ import React from "react";
 import { getFromLS, safeToLS } from "./components/configdata/LocalStorage";
 import "./SettingsPanel.css";
 
-export default class SettingsPanel extends React.Component<{}, {settings: any}> {
+enum DepotDataState {
+    unknown,
+    loaded,
+    unloaded,
+    failed
+}
+
+export default class SettingsPanel extends React.Component<{}, {settings: any, depotdatastate: DepotDataState}> {
     defaultsettings = {provider: 'Random', updateInterval: 10000};
 
     constructor(props: {}) {
         super(props);
 
+        this.depotDataInput = React.createRef();
+
         console.log(JSON.stringify(getFromLS("settings") || this.defaultsettings));
 
         this.state = {
-            settings: JSON.parse(JSON.stringify(getFromLS("settings") || this.defaultsettings))
+            settings: JSON.parse(JSON.stringify(getFromLS("settings") || this.defaultsettings)),
+            depotdatastate: DepotDataState.unknown
         };
         console.log(JSON.stringify(this.state.settings));
     }
@@ -49,6 +59,27 @@ export default class SettingsPanel extends React.Component<{}, {settings: any}> 
         this.storeSettings(localsettings);
     }
 
+    private depotDataInput: any;
+    onSettingsChangeDepotData(event: React.FormEvent<HTMLInputElement>) {
+        const thisobj = this;
+        fetch(this.depotDataInput.current.value)
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(myJson) {
+            safeToLS("depot", myJson);
+            thisobj.setState({depotdatastate: DepotDataState.loaded});
+        })
+        .catch((e) => {
+            thisobj.setState({depotdatastate: DepotDataState.failed});
+        });
+    }
+
+    onSettingsChangeDepotDataClear(event: React.FormEvent<HTMLInputElement>) {
+        safeToLS("depot", null);
+        this.setState({depotdatastate: DepotDataState.unloaded})
+    }
+
     render() {
         const providerSelected = this.state.settings.provider === 'OnVista' ? "OnVista" : "Random";
         return (
@@ -74,16 +105,52 @@ export default class SettingsPanel extends React.Component<{}, {settings: any}> 
                     </label>
                     <br />
                     <label>
-                        <div className="SettingsChecks">
+                        <span className="SettingsChecks">
                             <input 
                                 type="number" 
                                 id="updateInterval" 
                                 defaultValue={this.state.settings.updateInterval}
                                 onChange={e => this.onSettingsChangeUpdateInterval(e)} />
-                        </div>
-                        <div className="SettingsChecks">
+                        </span>
+                        <span className="SettingsChecks">
                             Aktualisierungsintervall<br/>Zeit in ms zwischen den Abfragen der aktuellen Kurse
-                        </div>
+                        </span>
+                    </label>
+                    <br />
+                    <label>
+                        <span className="SettingsChecks">
+                            <input
+                                type="text"
+                                id="depotdataurl"
+                                ref={this.depotDataInput}
+                                defaultValue="" />
+                            <input
+                                type="button"
+                                id="depotdataload"
+                                value="Daten laden" 
+                                onClick={e => this.onSettingsChangeDepotData(e)}/>
+                            <input
+                                type="button"
+                                id="depotdataclear"
+                                value="Daten initialisieren"
+                                onClick={e => this.onSettingsChangeDepotDataClear(e)} />
+                            <p>{(this.state.depotdatastate === DepotDataState.failed) ? "Laden fehlgeschlagen"
+                                : ( (this.state.depotdatastate === DepotDataState.loaded) ? "Daten geladen, Seite neu laden um Ergebnis zu sehen"
+                                : ( (this.state.depotdatastate === DepotDataState.unloaded) ? "Daten gelöscht" : "" ))}</p>
+                        </span>
+                        <span className="SettingsChecks">
+                            Quelle für Depotdaten zum Laden.<br />Die Antwort der Webabfrage muss das JSON Schema<br />
+{`{entity: [depotdata]}`}<br />
+{`depotdata := {`}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{`Name: string`}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{`ISIN: string`}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{`onvistaType?: ["stocks"|"funds"]`}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{`SeletedExchange: String`}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{`Amount: number`}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;{`PriceBuy: number`}<br />
+{`}`}<br />
+erfüllen.
+                        </span>
                     </label>
                 </div>
             </div>
