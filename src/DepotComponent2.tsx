@@ -125,21 +125,11 @@ class DepotModel {
       percToBuy: this.positions[idx].percToBuy || 0,
       direction: this.positions[idx].direction || Direction.Unknown 
     });
-    this.informListener("valueNow", {
-      isin: "valueNow", 
+    this.informListener("total", {
+      isin: "total", 
       lastPrice: this.valueNow,
       market: "",
-      valueBuy: 0, valueNow: 0, diffToBuy: 0, percToBuy: 0, direction: direction});
-    this.informListener("diffToBuy", {
-      isin: "diffToBuy", 
-      lastPrice: this.diffToBuy,
-      market: "",
-      valueBuy: 0, valueNow: 0, diffToBuy: 0, percToBuy: 0, direction: direction});
-    this.informListener("percToBuy", {
-      isin: "percToBuy", 
-      lastPrice: this.percToBuy,
-      market: "",
-      valueBuy: 0, valueNow: 0, diffToBuy: 0, percToBuy: 0, direction: direction});
+      valueBuy: 0, valueNow: this.valueNow, diffToBuy: this.diffToBuy, percToBuy: this.percToBuy, direction: direction});
   }
   registerListener(field: string, type: TIsinProp, onchange: IDepotModelUpdateProcessor): void {
     if(!this.listenerRegister.has(field)) {
@@ -522,12 +512,12 @@ function DepotComponent2() {
             <div><table>
               <tr>
                 <td>Gesamt:&nbsp;&nbsp;</td>
-                <td><OnVistaValue isin="valueNow" isinType={TIsinProp.PriceNow} onvistaType=""/></td>
+                <td><OnVistaValue isin="total" isinType={TIsinProp.ValueNow} onvistaType=""/></td>
                 <td>&nbsp;&nbsp;|&nbsp;&nbsp;</td>
                 <td>Diff:&nbsp;&nbsp;</td>
-                <td><OnVistaValue isin="diffToBuy" isinType={TIsinProp.PriceNow} onvistaType=""/></td>
+                <td><OnVistaValue isin="total" isinType={TIsinProp.Diff} onvistaType=""/></td>
                 <td>&nbsp;&nbsp;</td>
-                <td><OnVistaValue isin="percToBuy" isinType={TIsinProp.PriceNow} onvistaType=""/></td>
+                <td><OnVistaValue isin="total" isinType={TIsinProp.Percentage} onvistaType=""/></td>
               </tr>
             </table></div>
             <div className="depot-container2" onMouseDown={(event) => event.stopPropagation()}>
