@@ -8,7 +8,7 @@ class MobileDepotRow extends React.Component<{position: IDepotDataDepotPosition}
         return (
             <tr className="MobileDepot">
                 <div className="mobileValuesLeft">
-                    <p className="rowheader">{this.props.position.Name}</p>
+                    <p className="rowheader">{this.props.position.Name.substring(0, 30)}</p>
                     <p><b>Stück/Nominale:</b> {this.props.position.Amount}</p>
                     <p><b>ISIN:</b> {this.props.position.ISIN}</p>
                     <p><b>Handelsplatz:</b> <UpdateValue isin={this.props.position.ISIN} /></p>
@@ -44,12 +44,12 @@ export default class MobileDepot extends React.Component<{}> {
                     <tr id="summarize" className="MobileDepot">
                         <td>
                             <div className="mobileValuesLeft">
-                                <p className="depotvalue"><OnVistaValue isin="valueNow" isinType={TIsinProp.PriceNow} onvistaType="" /></p>
+                                <p className="depotvalue"><OnVistaValue isin="total" isinType={TIsinProp.ValueNow} onvistaType="" /></p>
                                 <p>Depotwert</p>
                                 <p>&nbsp;</p>
                                 <div className="mobileValuesRight">
-                                    <p><OnVistaValue isin="percToBuy" isinType={TIsinProp.PriceNow} onvistaType="" /></p>
-                                    <p><OnVistaValue isin="diffToBuy" isinType={TIsinProp.PriceNow} onvistaType="" /></p>
+                                    <p><OnVistaValue isin="total" isinType={TIsinProp.Percentage} onvistaType="" /></p>
+                                    <p><OnVistaValue isin="total" isinType={TIsinProp.Diff} onvistaType="" /></p>
                                     <p>&nbsp;</p>
                                 </div>
                             </div>
