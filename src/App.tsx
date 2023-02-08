@@ -1,24 +1,33 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import './App.css';
-import MyResponsiveGrid from "./MyResponsiveGrid";
-import SettingsPanel from "./SettingsPanel";
 import '/node_modules/react-grid-layout/css/styles.css';
 import '/node_modules/react-resizable/css/styles.css';
 
-function App() {
-  const [page, setPage] = useState(0);
-  window.Buffer = window.Buffer || require("buffer").Buffer;  // do not know why this is necessary. See https://stackoverflow.com/questions/68707553/uncaught-referenceerror-buffer-is-not-defined
+// Go through the react-router-dom example on https://github.com/Annysah/react-ts-sidebar-menu/blob/master/src/App.tsx
 
-  const pagecontent = page === 1 ? <SettingsPanel /> : <MyResponsiveGrid />;
+
+import Sidebar from './components/sidebar/Sidebar'
+
+import MyResponsiveGrid from "./MyResponsiveGrid";
+import MobileDepot from "./pages/MobileDepot";
+import SettingsPanel from "./SettingsPanel";
+
+const App: React.FunctionComponent = () => {
+  // do not know why this is necessary. See https://stackoverflow.com/questions/68707553/uncaught-referenceerror-buffer-is-not-defined
+  window.Buffer = window.Buffer || require("buffer").Buffer;  
 
   return (
-    <div className="App">
-      <header className="App-header">
-      </header>
-      <div className="App-menu"><a href="https://github.com/mhhoeper/musterdepot">Github Repository</a>&nbsp;&nbsp;
-      | Menü: <span onClick={() => setPage(0)}>Daten</span> - <span onClick={() => setPage(1)}>Einstellungen</span><br />&nbsp;</div>
-      {pagecontent}
-    </div>
+    <>
+      <Router>
+        <Sidebar />
+        <Routes>
+          <Route path='/musterdepot' element={<MyResponsiveGrid />} />
+          <Route path='/musterdepot/mobiledepot' element={<MobileDepot />} />
+          <Route path='/musterdepot/settings' element={<SettingsPanel />} />
+        </Routes>
+      </Router>
+    </>
   );
 }
 

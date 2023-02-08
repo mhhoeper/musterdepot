@@ -2,12 +2,8 @@ import React from "react";
 import { ReactGrid, Column, Row, Id , Cell, CellTemplate, Uncertain, Compatible, UncertainCompatible, getCellProperty, CellTemplates, DefaultCellTypes } from "@silevis/reactgrid";
 import "@silevis/reactgrid/styles.css";
 import "./DepotComponent2.css"
-import filedepotdata from "./depotdata.json";
 import { getDataProvider, IUpdateData } from "./DataProvider";
-import { getFromLS } from "./LocalStorage";
-
-const userDepotData = getFromLS('depot');
-var depotdata = ((userDepotData === undefined) || (userDepotData === null)) ? filedepotdata : userDepotData as typeof filedepotdata;
+import DepotDataManager, { IDepotDataDepotPosition } from './components/configdata/DepotData';
 
 enum Direction {
   Up = 1,
@@ -15,7 +11,7 @@ enum Direction {
   Unknown
 }
 
-enum TIsinProp {
+export enum TIsinProp {
   PriceNow,
   ValueNow,
   Diff,
@@ -26,10 +22,10 @@ interface Position {
     Name: string;
     ISIN: string;
     onvistaType: string;
-    WKN: string;
+    WKN?: string;
     SelectedExchange: string;
     Amount: number;
-    Buy: number;
+    PriceBuy: number;
     priceNow?: number;
     valueBuy?: number;
     valueNow?: number;
@@ -65,7 +61,7 @@ class DepotModel {
   private updatePosition(position: Position, newPrice: number) {
     let oldPrice = position.priceNow;
     position.priceNow = newPrice;
-    position.valueBuy = position.Buy * position.Amount;
+    position.valueBuy = position.PriceBuy * position.Amount;
     position.valueNow = position.priceNow * position.Amount;
     position.diffToBuy = position.valueNow - position.valueBuy;
     position.percToBuy = ((position.valueNow / position.valueBuy) - 1) * 100;
@@ -92,14 +88,15 @@ class DepotModel {
   constructor(positions: Position[]) {
     this.positions = positions;
     this.positions.forEach(position => {
-      position.valueBuy = position.Amount * position.Buy;
+      position.valueBuy = position.Amount * position.PriceBuy;
     });
     this.valueBuy = this.calcValueBuy(positions);
     this.valueNow = this.calcValueNow(positions);
     this.diffToBuy = this.valueNow - this.valueBuy;
     this.percToBuy = 1 - (this.valueBuy / this.valueNow);
     positions.forEach(position => {
-      getDataProvider(position.ISIN, position.onvistaType, this.onchange);
+      const onvistaType = (position.onvistaType === undefined) ? "" : position.onvistaType;
+      getDataProvider(position.ISIN, onvistaType, this.onchange);
     });
     this.listenerRegister = new Map<string, IDepotModelListener[]>();
   }
@@ -151,11 +148,14 @@ class DepotModel {
       this.listenerRegister.get(field)!.push({dataType: type, updateProcessor: onchange});
     }
   }
+  getPositions() {
+    return this.positions;
+  }
 }
 
-const depotModel = new DepotModel(depotdata.Positions);
+const depotModel = new DepotModel(DepotDataManager.getDepotDataManager().depotdata.entities[0].Positions as IDepotDataDepotPosition[]);
 
-const getPeople = (): Position[] => depotdata.Positions;
+const getPeople = (): Position[] => depotModel.getPositions();
   
 const getColumns = (): Column[] => [
     { columnId: "name", width: 150, resizable: true },
@@ -189,15 +189,10 @@ const headerRow: Row = {
 
 
 
-class OnVistaValue extends React.Component<{isin: string, isinType: TIsinProp, onvistaType: string}, {value: number, valuestr: string, direction: Direction, theclass: string, signcolor: string}> {
-
-  //private onvista;
-
+export class OnVistaValue extends React.Component<{isin: string, isinType: TIsinProp, onvistaType: string}, {value: number, valuestr: string, direction: Direction, theclass: string, signcolor: string}> {
   constructor(props: {isin: string, isinType: TIsinProp, onvistaType: string}) {
     super(props);
     this.state = {value: 0, valuestr: "", direction: Direction.Unknown, theclass: "", signcolor: ""};
-
-    //this.onvista = getDataProvider(this.props.isin, this.props.onvistaType, this.onchange);
     depotModel.registerListener(this.props.isin, this.props.isinType, this.onchange);
   }
   onchange = (data: IDepotModelUpdateData) => {
@@ -207,23 +202,35 @@ class OnVistaValue extends React.Component<{isin: string, isinType: TIsinProp, o
     let direction = data.direction;
     let classset = "";
     let signcolor = "";
+    let prefix = "";
+    let suffix = "";
     if(lastvalue !== value) {
       if(this.props.isinType === TIsinProp.PriceNow) {
         // keep everything like it is
+        suffix = " €";
       } else if(this.props.isinType === TIsinProp.ValueNow) {
         value = data.valueNow;
+        suffix = " €";
       } else if(this.props.isinType === TIsinProp.Diff) {
         value = data.diffToBuy;
+        if(value>0) {
+          prefix = "+";
+        }
+        suffix = " €";
       } else {
         // TIsinProp.Percentage
         value = data.percToBuy;
+        if(value>0) {
+          prefix = "+";
+        }
+        suffix = " %"; 
       }
       classset = direction === Direction.Up ? "valueUp" : ( direction === Direction.Down ? "valueDown" : "" );
       signcolor = (this.props.isinType === TIsinProp.Diff) || (this.props.isinType === TIsinProp.Percentage) ? 
         ((value > 0) ? "posvalue" : ((value < 0) ? "negvalue" : "")) : "";
       this.setState((state) => ({
         value: value,
-        valuestr: value.toLocaleString('de-DE', {minimumFractionDigits: decimalPlaces, maximumFractionDigits: decimalPlaces}), 
+        valuestr: prefix+value.toLocaleString('de-DE', {minimumFractionDigits: decimalPlaces, maximumFractionDigits: decimalPlaces})+suffix, 
         direction: direction,
         theclass: "",
         signcolor: signcolor
@@ -231,7 +238,7 @@ class OnVistaValue extends React.Component<{isin: string, isinType: TIsinProp, o
       let intervalId = setInterval(() => {
         this.setState((state) => ({
           value: value,
-          valuestr: value.toLocaleString('de-DE', {minimumFractionDigits: decimalPlaces, maximumFractionDigits: decimalPlaces}), 
+          valuestr: prefix+value.toLocaleString('de-DE', {minimumFractionDigits: decimalPlaces, maximumFractionDigits: decimalPlaces})+suffix, 
           direction: direction,
           theclass: classset,
           signcolor: signcolor
@@ -243,21 +250,16 @@ class OnVistaValue extends React.Component<{isin: string, isinType: TIsinProp, o
 
   render() {
     return (
-      <div className={this.state.theclass + " " + this.state.signcolor} id="value">{this.state.valuestr}</div>
+      <span className={this.state.theclass + " " + this.state.signcolor} id="value">{this.state.valuestr}</span>
     );
   }
 }
 
 
-class UpdateValue extends React.Component<{isin: string}, {market: string}> {
-
-  //private onvista;
-
+export class UpdateValue extends React.Component<{isin: string}, {market: string}> {
   constructor(props: {isin: string}) {
     super(props);
     this.state = {market: ""};
-
-    //this.onvista = getDataProvider(this.props.isin, this.props.onvistaType, this.onchange);
     depotModel.registerListener(this.props.isin, TIsinProp.ValueNow, this.onchange);
   }
   onchange = (data: IDepotModelUpdateData) => {
@@ -266,10 +268,9 @@ class UpdateValue extends React.Component<{isin: string}, {market: string}> {
       market: market
     }));
   }
-
   render() {
     return (
-      <div>{this.state.market}</div>
+      <span>{this.state.market}</span>
     );
   }
 }
@@ -488,7 +489,7 @@ const getRows = (people: Position[]): MyRow[] => [
       { type: "text", text: person.Name },
       { type: "text", text: person.ISIN },
       { type: "number", value: person.Amount },
-      { type: "number", value: person.Buy, format: new Intl.NumberFormat('de-DE', {minimumFractionDigits: 2, maximumFractionDigits: 2}) },
+      { type: "number", value: person.PriceBuy, format: new Intl.NumberFormat('de-DE', {minimumFractionDigits: 2, maximumFractionDigits: 2}) },
       { type: "price", text: "x", isin: person.ISIN, onvistaType: person.onvistaType},
       { type: "number", value: person.valueBuy || 0},
       { type: "valueNow", text: "x", isin: person.ISIN, onvistaType: person.onvistaType},
@@ -517,7 +518,7 @@ function DepotComponent2() {
 
     return (
         <div className="depot-container">
-            <div>Depot - {depotdata.Name}</div>
+            <div>Depot - {DepotDataManager.getDepotDataManager().depotdata.entities[0].Name}</div>
             <div><table>
               <tr>
                 <td>Gesamt:&nbsp;&nbsp;</td>

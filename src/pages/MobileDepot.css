@@ -1,0 +1,50 @@
+.MobileDepot table  {
+    width: 100vw;
+    border-collapse: collapse;
+}
+
+.MobileDepot tr {
+    border-bottom: 1px solid black;
+}
+
+#summarize {
+    background: #202020;
+    color: #ffffff;
+}
+
+.mobileValuesLeft {
+    position: relative;
+    top: 0px;
+    left: 0px;
+}
+
+.mobileValuesRight { 
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
+
+.mobileValuesLeft p {
+    margin: 4px;
+}
+
+.mobileValuesRight p {
+    text-align: right;
+    margin: 4px;
+}
+
+.depotvalue {
+    margin: 0px;
+    font-size: 2em;
+}
+
+tr.MobileDepot > * .rowheader {
+    color: black;
+    font-size: 1em;
+}
+
+tr.MobileDepot > div > * {
+    color: rgb(180, 180, 180);
+    font-size: 0.9em;
+
+}
