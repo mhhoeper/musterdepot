@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import * as FaIcons from 'react-icons/fa' 
 
-import { SidebarData } from './SidebarData';
+import { PagesData } from '../../pages/pagesconfig/PagesData';
 
 const Navbar = styled.div`
     display: flex;
@@ -89,7 +89,7 @@ const Sidebar: React.FunctionComponent = () => {
                     <FaIcons.FaTimes />
                 </MenuIconClose>
 
-                {SidebarData.map((item, index) => {
+                {PagesData.map((item, index) => {
                     return (
                         <MenuItems key={index}>
                             <MenuItemLinks to={item.path}>
