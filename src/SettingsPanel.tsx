@@ -9,7 +9,7 @@ enum DepotDataState {
     failed
 }
 
-export default class SettingsPanel extends React.Component<{}, {settings: any, depotdatastate: DepotDataState}> {
+export default class SettingsPanel extends React.Component<{}, {settings: any, depotdatastate: DepotDataState, statetext: string}> {
     defaultsettings = {provider: 'Random', updateInterval: 10000};
 
     constructor(props: {}) {
@@ -21,7 +21,8 @@ export default class SettingsPanel extends React.Component<{}, {settings: any, d
 
         this.state = {
             settings: JSON.parse(JSON.stringify(getFromLS("settings") || this.defaultsettings)),
-            depotdatastate: DepotDataState.unknown
+            depotdatastate: DepotDataState.unknown,
+            statetext: ""
         };
         console.log(JSON.stringify(this.state.settings));
     }
@@ -69,9 +70,12 @@ export default class SettingsPanel extends React.Component<{}, {settings: any, d
         .then(function(myJson) {
             safeToLS("depot", myJson);
             thisobj.setState({depotdatastate: DepotDataState.loaded});
+            thisobj.setState({statetext: "success"});
         })
         .catch((e) => {
             thisobj.setState({depotdatastate: DepotDataState.failed});
+            thisobj.setState({statetext: (e as Error).message});
+            console.log(e);
         });
     }
 
@@ -137,6 +141,7 @@ export default class SettingsPanel extends React.Component<{}, {settings: any, d
                             <p>{(this.state.depotdatastate === DepotDataState.failed) ? "Laden fehlgeschlagen"
                                 : ( (this.state.depotdatastate === DepotDataState.loaded) ? "Daten geladen, Seite neu laden um Ergebnis zu sehen"
                                 : ( (this.state.depotdatastate === DepotDataState.unloaded) ? "Daten gelöscht" : "" ))}</p>
+                            <p>{this.state.statetext}</p>
                         </span>
                         <span className="SettingsChecks">
                             Quelle für Depotdaten zum Laden.<br />Die Antwort der Webabfrage muss das JSON Schema<br />
