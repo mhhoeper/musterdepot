@@ -14,6 +14,13 @@ export const PagesData = [
         content: <MyResponsiveGrid />
     },
     {
+        path: '/newdesktop',
+        level: 2,
+        title: 'Neuer Desktop',
+        icon: <FaIcons.FaPlus />,
+        content: <div />
+    },
+    {
         path: '/mobildepot',
         title: 'Mobile Depot',
         icon: <FaIcons.FaDollarSign />,

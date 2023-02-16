@@ -6,6 +6,7 @@ import * as FaIcons from 'react-icons/fa'
 
 import { PagesData } from '../../pages/pagesconfig/PagesData';
 
+// The bar on the top of the page
 const Navbar = styled.div`
     display: flex;
     justify-content: start;
@@ -34,6 +35,7 @@ const MenuIconClose = styled(Link)`
     z-index: 9;
 `
 
+// The side bar that opens on pressing burger menu
 const SidebarMenu = styled.div<{close: boolean}>`
     width: 250px;
     height: 100vh;
