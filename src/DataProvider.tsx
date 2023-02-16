@@ -45,21 +45,15 @@ export class RandomDataProvider extends BaseProvider {
         this.isin = isin;
         this.price = 4000;
 
-        this.intervalId = this.createNewInterval();
+        this.queryInstrument();
+        this.intervalId = setInterval(this.queryInstrument.bind(this), settings.updateInterval + Math.floor(Math.random() * 3000));
     }
-    createNewInterval() {
-        var intervalId = setInterval(() => {
-            clearInterval(this.intervalId);
-
-            this.price += Math.floor(Math.random() * 20) - 10;
-            const thisobj = this;
-            this.ondata.forEach(function (value) {
-                value({isin: thisobj.isin, lastPrice: thisobj.price, market: "Test"});
-            });
-            this.intervalId = this.createNewInterval();
-          }, settings.updateInterval + Math.floor(Math.random() * 3000));
-        return intervalId;
-    }    
+    queryInstrument(): void {
+        this.price += Math.floor(Math.random() * 20) - 10;
+        this.ondata.forEach( (value) => {
+            value({isin: this.isin, lastPrice: this.price, market: "Test"});
+        });        
+    }
     stop(): void {
         clearInterval(this.intervalId);
     }
@@ -77,9 +71,8 @@ export class OnVistaProvider extends BaseProvider {
         super(ondata);
         this.isin = isin;
         this.onvistaType = onvistaType;
-        this.intervalId = setInterval( () => {
-            this.queryInstrument();
-        }, settings.updateInterval+ 2000 + Math.floor(Math.random() * 4000) - 2000);
+        this.queryInstrument();
+        this.intervalId = setInterval(this.queryInstrument.bind(this), settings.updateInterval+ 2000 + Math.floor(Math.random() * 4000) - 2000);
         this.ondata = [ondata];
     }
     stop(): void {
@@ -89,21 +82,20 @@ export class OnVistaProvider extends BaseProvider {
         // see https://github.com/cloasdata/pyOnvista
         // example 1: https://api.onvista.de/api/v1/stocks/ISIN:DE0007664039/snapshot
         // example 2: https://api.onvista.de/api/v1/instruments/STOCK/1552283/eod_history?idNotation=1552283&range=Y5&startDate=2022-10-01
-        let useobj = this;
         if(this.isin !== "") {
             fetch('https://api.onvista.de/api/v1/' + this.onvistaType + '/ISIN:' + this.isin + '/snapshot')
-                .then(function(response) {
+                .then( (response) => {
                     return response.json();
                 })
-                .then(function(myJson) {
-                    useobj.data = myJson;
-                    if(!('statusCode' in useobj.data) || useobj.data.statusCode !== 404 ) {
+                .then( (myJson) => {
+                    this.data = myJson;
+                    if(!('statusCode' in this.data) || this.data.statusCode !== 404 ) {
                         // Check if Tradegate quote is available
-                        let bestquote = useobj.data.quote.last;
-                        let market = useobj.data.quote.market.name;
+                        let bestquote = this.data.quote.last;
+                        let market = this.data.quote.market.name;
                         try {
-                            if(useobj.data.quoteList) {
-                                useobj.data.quoteList.list.forEach(function (quote: any) {
+                            if(this.data.quoteList) {
+                                this.data.quoteList.list.forEach(function (quote: any) {
                                     if (quote.market.codeExchange === "GAT") {
                                         bestquote = quote.last;
                                         market = quote.market.name;
@@ -113,10 +105,10 @@ export class OnVistaProvider extends BaseProvider {
                         }
                         catch(e) {
                             console.log(e);
-                            console.log(useobj.data);
+                            console.log(this.data);
                         }
-                        useobj.ondata.forEach(function (value) {
-                            value({isin: useobj.data.instrument.isin, lastPrice: bestquote, market: market, additionalData: useobj.data});
+                        this.ondata.forEach( (value) => {
+                            value({isin: this.data.instrument.isin, lastPrice: bestquote, market: market, additionalData: this.data});
                         });
                     }
                 });

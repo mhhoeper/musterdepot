@@ -86,6 +86,7 @@ class DepotModel {
     return sum;
   }
   constructor(positions: Position[]) {
+    this.listenerRegister = new Map<string, IDepotModelListener[]>();
     this.positions = positions;
     this.positions.forEach(position => {
       position.valueBuy = position.Amount * position.PriceBuy;
@@ -98,7 +99,6 @@ class DepotModel {
       const onvistaType = (position.onvistaType === undefined) ? "" : position.onvistaType;
       getDataProvider(position.ISIN, onvistaType, this.onchange);
     });
-    this.listenerRegister = new Map<string, IDepotModelListener[]>();
   }
   private informListener(listenerID: string, data: IDepotModelUpdateData) {
     const listenerArray = this.listenerRegister.get(listenerID);
