@@ -35,7 +35,7 @@ const App: React.FunctionComponent = () => {
   return (
     <>
       <HashRouter>
-        <Sidebar2 children="<span>abc</span>" />
+        <Sidebar />
         <Routes>
           <Route element={<DebugLayout />}>
           {PagesData.map( (page, index) => {
