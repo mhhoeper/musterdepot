@@ -4,15 +4,22 @@ import * as FaIcons from 'react-icons/fa'  // see https://react-icons.github.io/
 // The different pages
 import MyResponsiveGrid from "../../MyResponsiveGrid";
 import MobileDepot from "../../pages/MobileDepot";
+import ConfigureDesktop from "../../pages/configuredesktop/ConfigureDesktop";
 import SettingsPanel from "../../SettingsPanel";
 
 export const PagesData = [
     {
         path: '/',
-        title: 'Desktop Ansicht',
+        title: 'Example',
         icon: <FaIcons.FaDesktop />,
         content: <MyResponsiveGrid />
     },
+    {
+        path: '/configuredesktop',
+        title: 'Desktop Ansicht',
+        icon: <FaIcons.FaDesktop />,
+        content: <ConfigureDesktop />
+    },    
     {
         path: '/newdesktop',
         level: 2,
