@@ -7,6 +7,7 @@ import '/node_modules/react-resizable/css/styles.css';
 // Go through the react-router-dom example on https://github.com/Annysah/react-ts-sidebar-menu/blob/master/src/App.tsx
 
 import Sidebar from './components/sidebar/Sidebar';
+import Sidebar2 from './components/sidebar/Sidebar2';
 import { PagesData } from './pages/pagesconfig/PagesData';
 
 
@@ -29,10 +30,12 @@ const App: React.FunctionComponent = () => {
   // do not know why this is necessary. See https://stackoverflow.com/questions/68707553/uncaught-referenceerror-buffer-is-not-defined
   window.Buffer = window.Buffer || require("buffer").Buffer;  
 
+  // <Sidebar />    or
+  // <Sidebar2 children="<span>abc</span>" /> 
   return (
     <>
       <HashRouter>
-        <Sidebar />
+        <Sidebar2 children="<span>abc</span>" />
         <Routes>
           <Route element={<DebugLayout />}>
           {PagesData.map( (page, index) => {
